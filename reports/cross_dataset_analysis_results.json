@@ -1,0 +1,214 @@
+{
+  "total_flows_all": 2830743,
+  "total_benign_flows": 2273097,
+  "total_attack_flows": 557646,
+  "benign_percentage": 80.3004,
+  "attack_percentage": 19.699599999999997,
+  "labels_breakdown": [
+    {
+      "Class": "BENIGN",
+      "Total_Count": 2273097,
+      "Percentage": 80.3004
+    },
+    {
+      "Class": "DoS Hulk",
+      "Total_Count": 231073,
+      "Percentage": 8.163
+    },
+    {
+      "Class": "PortScan",
+      "Total_Count": 158930,
+      "Percentage": 5.6144
+    },
+    {
+      "Class": "DDoS",
+      "Total_Count": 128027,
+      "Percentage": 4.5227
+    },
+    {
+      "Class": "DoS GoldenEye",
+      "Total_Count": 10293,
+      "Percentage": 0.3636
+    },
+    {
+      "Class": "FTP-Patator",
+      "Total_Count": 7938,
+      "Percentage": 0.2804
+    },
+    {
+      "Class": "SSH-Patator",
+      "Total_Count": 5897,
+      "Percentage": 0.2083
+    },
+    {
+      "Class": "DoS slowloris",
+      "Total_Count": 5796,
+      "Percentage": 0.2048
+    },
+    {
+      "Class": "DoS Slowhttptest",
+      "Total_Count": 5499,
+      "Percentage": 0.1943
+    },
+    {
+      "Class": "Bot",
+      "Total_Count": 1966,
+      "Percentage": 0.0695
+    },
+    {
+      "Class": "Web Attack - Brute Force",
+      "Total_Count": 1507,
+      "Percentage": 0.0532
+    },
+    {
+      "Class": "Web Attack - XSS",
+      "Total_Count": 652,
+      "Percentage": 0.023
+    },
+    {
+      "Class": "Infiltration",
+      "Total_Count": 36,
+      "Percentage": 0.0013
+    },
+    {
+      "Class": "Web Attack - Sql Injection",
+      "Total_Count": 21,
+      "Percentage": 0.0007
+    },
+    {
+      "Class": "Heartbleed",
+      "Total_Count": 11,
+      "Percentage": 0.0004
+    }
+  ],
+  "benign_drift_by_day": [
+    {
+      "Day": "Monday",
+      "Total_Flows": 529918,
+      "Benign_Flows": 529918,
+      "Attack_Flows": 0,
+      "Attack_Pct": 0.0,
+      "Duration_median": 31303.0,
+      "Duration_mean": 10389271.161264572,
+      "Fwd_Pkts_median": 2.0,
+      "Bwd_Pkts_median": 2.0,
+      "Flow_IAT_Mean_median": 10783.9,
+      "Pkt_Size_mean": 116.61373062497253,
+      "DNS_Port53_Pct": 40.51,
+      "HTTPS_Port443_Pct": 26.6,
+      "HTTP_Port80_Pct": 9.59
+    },
+    {
+      "Day": "Tuesday",
+      "Total_Flows": 445909,
+      "Benign_Flows": 432074,
+      "Attack_Flows": 13835,
+      "Attack_Pct": 3.1,
+      "Duration_median": 31286.0,
+      "Duration_mean": 10957484.731529783,
+      "Fwd_Pkts_median": 2.0,
+      "Bwd_Pkts_median": 2.0,
+      "Flow_IAT_Mean_median": 10776.11111,
+      "Pkt_Size_mean": 124.29490080593827,
+      "DNS_Port53_Pct": 44.19,
+      "HTTPS_Port443_Pct": 22.51,
+      "HTTP_Port80_Pct": 10.57
+    },
+    {
+      "Day": "Wednesday",
+      "Total_Flows": 692703,
+      "Benign_Flows": 440031,
+      "Attack_Flows": 252672,
+      "Attack_Pct": 36.48,
+      "Duration_median": 31047.0,
+      "Duration_mean": 12095385.245703144,
+      "Fwd_Pkts_median": 2.0,
+      "Bwd_Pkts_median": 2.0,
+      "Flow_IAT_Mean_median": 12394.8,
+      "Pkt_Size_mean": 129.390720125669,
+      "DNS_Port53_Pct": 44.44,
+      "HTTPS_Port443_Pct": 22.78,
+      "HTTP_Port80_Pct": 11.08
+    },
+    {
+      "Day": "Thursday-Morning",
+      "Total_Flows": 170366,
+      "Benign_Flows": 168186,
+      "Attack_Flows": 2180,
+      "Attack_Pct": 1.28,
+      "Duration_median": 31213.0,
+      "Duration_mean": 12540399.376868468,
+      "Fwd_Pkts_median": 2.0,
+      "Bwd_Pkts_median": 2.0,
+      "Flow_IAT_Mean_median": 12864.833335,
+      "Pkt_Size_mean": 115.36163645897055,
+      "DNS_Port53_Pct": 45.51,
+      "HTTPS_Port443_Pct": 21.31,
+      "HTTP_Port80_Pct": 11.11
+    },
+    {
+      "Day": "Thursday-Afternoon",
+      "Total_Flows": 288602,
+      "Benign_Flows": 288566,
+      "Attack_Flows": 36,
+      "Attack_Pct": 0.01,
+      "Duration_median": 306.0,
+      "Duration_mean": 8965789.187076787,
+      "Fwd_Pkts_median": 2.0,
+      "Bwd_Pkts_median": 2.0,
+      "Flow_IAT_Mean_median": 170.0,
+      "Pkt_Size_mean": 96.92776184241374,
+      "DNS_Port53_Pct": 34.42,
+      "HTTPS_Port443_Pct": 17.94,
+      "HTTP_Port80_Pct": 8.95
+    },
+    {
+      "Day": "Friday-Morning",
+      "Total_Flows": 191033,
+      "Benign_Flows": 189067,
+      "Attack_Flows": 1966,
+      "Attack_Pct": 1.03,
+      "Duration_median": 31085.0,
+      "Duration_mean": 11762425.522677146,
+      "Fwd_Pkts_median": 2.0,
+      "Bwd_Pkts_median": 2.0,
+      "Flow_IAT_Mean_median": 14060.18182,
+      "Pkt_Size_mean": 120.64984877213814,
+      "DNS_Port53_Pct": 47.75,
+      "HTTPS_Port443_Pct": 20.75,
+      "HTTP_Port80_Pct": 10.9
+    },
+    {
+      "Day": "Friday-PortScan",
+      "Total_Flows": 286467,
+      "Benign_Flows": 127537,
+      "Attack_Flows": 158930,
+      "Attack_Pct": 55.48,
+      "Duration_median": 30964.0,
+      "Duration_mean": 11979567.358695908,
+      "Fwd_Pkts_median": 2.0,
+      "Bwd_Pkts_median": 2.0,
+      "Flow_IAT_Mean_median": 11221.0,
+      "Pkt_Size_mean": 118.12250651396324,
+      "DNS_Port53_Pct": 45.94,
+      "HTTPS_Port443_Pct": 20.93,
+      "HTTP_Port80_Pct": 12.83
+    },
+    {
+      "Day": "Friday-DDoS",
+      "Total_Flows": 225745,
+      "Benign_Flows": 97718,
+      "Attack_Flows": 128027,
+      "Attack_Pct": 56.71,
+      "Duration_median": 171388.5,
+      "Duration_mean": 15306262.910364518,
+      "Fwd_Pkts_median": 2.0,
+      "Bwd_Pkts_median": 2.0,
+      "Flow_IAT_Mean_median": 59636.5,
+      "Pkt_Size_mean": 249.5906253645389,
+      "DNS_Port53_Pct": 32.7,
+      "HTTPS_Port443_Pct": 13.8,
+      "HTTP_Port80_Pct": 9.14
+    }
+  ]
+}

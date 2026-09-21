@@ -1,0 +1,93 @@
+{
+  "artifact": "CICIDS2017_COMBINED_RAW.csv",
+  "created": "2026-08-16T17:11:00.687670",
+  "description": "Controlled combination of all 8 CICIDS2017 CSV datasets with schema harmonization and provenance tracking",
+  "total_rows": 2830743,
+  "total_columns": 81,
+  "feature_columns": 78,
+  "provenance_columns": [
+    "Source_File",
+    "Source_Day",
+    "Source_Row_Index"
+  ],
+  "schema_harmonization": {
+    "column_whitespace_stripped": true,
+    "duplicate_column_dropped": "Fwd Header Length.1 (original index 34)",
+    "label_whitespace_stripped": true,
+    "web_attack_labels_normalized": true
+  },
+  "source_files": [
+    {
+      "filename": "Monday-WorkingHours.pcap_ISCX.csv",
+      "day_label": "Monday",
+      "rows": 529918
+    },
+    {
+      "filename": "Tuesday-WorkingHours.pcap_ISCX.csv",
+      "day_label": "Tuesday",
+      "rows": 445909
+    },
+    {
+      "filename": "Wednesday-workingHours.pcap_ISCX.csv",
+      "day_label": "Wednesday",
+      "rows": 692703
+    },
+    {
+      "filename": "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+      "day_label": "Thursday-Morning",
+      "rows": 170366
+    },
+    {
+      "filename": "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+      "day_label": "Thursday-Afternoon",
+      "rows": 288602
+    },
+    {
+      "filename": "Friday-WorkingHours-Morning.pcap_ISCX.csv",
+      "day_label": "Friday-Morning",
+      "rows": 191033
+    },
+    {
+      "filename": "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+      "day_label": "Friday-PortScan",
+      "rows": 286467
+    },
+    {
+      "filename": "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+      "day_label": "Friday-DDoS",
+      "rows": 225745
+    }
+  ],
+  "label_distribution": {
+    "BENIGN": 2273097,
+    "DoS Hulk": 231073,
+    "PortScan": 158930,
+    "DDoS": 128027,
+    "DoS GoldenEye": 10293,
+    "FTP-Patator": 7938,
+    "SSH-Patator": 5897,
+    "DoS slowloris": 5796,
+    "DoS Slowhttptest": 5499,
+    "Bot": 1966,
+    "Web Attack - Brute Force": 1507,
+    "Web Attack - XSS": 652,
+    "Infiltration": 36,
+    "Web Attack - Sql Injection": 21,
+    "Heartbleed": 11
+  },
+  "data_quality": {
+    "total_nan": 1358,
+    "total_inf": 4376,
+    "inf_columns": {
+      "Flow Bytes/s": 1509,
+      "Flow Packets/s": 2867
+    },
+    "duplicate_rows": 403550,
+    "duplicate_pct": 14.26
+  },
+  "output": {
+    "path": "data/combined\\CICIDS2017_COMBINED_RAW.csv",
+    "size_bytes": 1128720843,
+    "sha256": "f19e173b48fa1890f45ab7956d65cd2eb4837116cc5d1af473c154255f7a9b68"
+  }
+}

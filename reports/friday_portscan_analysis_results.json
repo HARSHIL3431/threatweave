@@ -1,0 +1,22 @@
+{
+  "dataset": "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+  "total_rows": 286467,
+  "labels": {
+    "PortScan": 158930,
+    "BENIGN": 127537
+  },
+  "duplicate_rows": 72353,
+  "duplicate_pct": 25.26,
+  "scan_dups": 68111,
+  "cols_with_nan": {
+    "Flow Bytes/s": 15
+  },
+  "cols_with_inf": {
+    "Flow Bytes/s": 356,
+    "Flow Packets/s": 371
+  },
+  "unique_scan_ports": 1000,
+  "scan_1pkt_pct": 99.07,
+  "scan_0bwd_pct": 0.04,
+  "scan_0dur_pct": 0.08
+}

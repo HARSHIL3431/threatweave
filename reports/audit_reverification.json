@@ -1,0 +1,136 @@
+{
+  "Monday": {
+    "filename": "Monday-WorkingHours.pcap_ISCX.csv",
+    "rows": 529918,
+    "duplicate_rows": 26935,
+    "dup_cols_identical_all_rows": null,
+    "nan_bytes": 64,
+    "inf_pkts": 437,
+    "inf_bytes": 373,
+    "inf_total": 437,
+    "inf_zero_dur": 437,
+    "inf_zero_dur_pct": 100.0,
+    "labels": {
+      "BENIGN": 529918
+    }
+  },
+  "Tuesday": {
+    "filename": "Tuesday-WorkingHours.pcap_ISCX.csv",
+    "rows": 445909,
+    "duplicate_rows": 24065,
+    "dup_cols_identical_all_rows": null,
+    "nan_bytes": 201,
+    "inf_pkts": 264,
+    "inf_bytes": 63,
+    "inf_total": 264,
+    "inf_zero_dur": 264,
+    "inf_zero_dur_pct": 100.0,
+    "labels": {
+      "BENIGN": 432074,
+      "FTP-Patator": 7938,
+      "SSH-Patator": 5897
+    }
+  },
+  "Wednesday": {
+    "filename": "Wednesday-workingHours.pcap_ISCX.csv",
+    "rows": 692703,
+    "duplicate_rows": 81909,
+    "dup_cols_identical_all_rows": null,
+    "nan_bytes": 1008,
+    "inf_pkts": 1297,
+    "inf_bytes": 289,
+    "inf_total": 1297,
+    "inf_zero_dur": 1297,
+    "inf_zero_dur_pct": 100.0,
+    "labels": {
+      "BENIGN": 440031,
+      "DoS Hulk": 231073,
+      "DoS GoldenEye": 10293,
+      "DoS slowloris": 5796,
+      "DoS Slowhttptest": 5499,
+      "Heartbleed": 11
+    }
+  },
+  "Thursday-Morning": {
+    "filename": "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+    "rows": 170366,
+    "duplicate_rows": 6066,
+    "dup_cols_identical_all_rows": null,
+    "nan_bytes": 20,
+    "inf_pkts": 135,
+    "inf_bytes": 115,
+    "inf_total": 135,
+    "inf_zero_dur": 135,
+    "inf_zero_dur_pct": 100.0,
+    "labels": {
+      "BENIGN": 168186,
+      "Web Attack \u00ef\u00bf\u00bd Brute Force": 1507,
+      "Web Attack \u00ef\u00bf\u00bd XSS": 652,
+      "Web Attack \u00ef\u00bf\u00bd Sql Injection": 21
+    }
+  },
+  "Thursday-Afternoon": {
+    "filename": "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+    "rows": 288602,
+    "duplicate_rows": 35630,
+    "dup_cols_identical_all_rows": null,
+    "nan_bytes": 18,
+    "inf_pkts": 207,
+    "inf_bytes": 189,
+    "inf_total": 207,
+    "inf_zero_dur": 207,
+    "inf_zero_dur_pct": 100.0,
+    "labels": {
+      "BENIGN": 288566,
+      "Infiltration": 36
+    }
+  },
+  "Friday-Morning": {
+    "filename": "Friday-WorkingHours-Morning.pcap_ISCX.csv",
+    "rows": 191033,
+    "duplicate_rows": 6888,
+    "dup_cols_identical_all_rows": null,
+    "nan_bytes": 28,
+    "inf_pkts": 122,
+    "inf_bytes": 94,
+    "inf_total": 122,
+    "inf_zero_dur": 122,
+    "inf_zero_dur_pct": 100.0,
+    "labels": {
+      "BENIGN": 189067,
+      "Bot": 1966
+    }
+  },
+  "Friday-PortScan": {
+    "filename": "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+    "rows": 286467,
+    "duplicate_rows": 72353,
+    "dup_cols_identical_all_rows": null,
+    "nan_bytes": 15,
+    "inf_pkts": 371,
+    "inf_bytes": 356,
+    "inf_total": 371,
+    "inf_zero_dur": 371,
+    "inf_zero_dur_pct": 100.0,
+    "labels": {
+      "PortScan": 158930,
+      "BENIGN": 127537
+    }
+  },
+  "Friday-DDoS": {
+    "filename": "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+    "rows": 225745,
+    "duplicate_rows": 2633,
+    "dup_cols_identical_all_rows": null,
+    "nan_bytes": 4,
+    "inf_pkts": 34,
+    "inf_bytes": 30,
+    "inf_total": 34,
+    "inf_zero_dur": 34,
+    "inf_zero_dur_pct": 100.0,
+    "labels": {
+      "DDoS": 128027,
+      "BENIGN": 97718
+    }
+  }
+}

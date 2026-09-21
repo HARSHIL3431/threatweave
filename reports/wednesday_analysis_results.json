@@ -1,0 +1,30 @@
+{
+  "dataset": "Wednesday-workingHours.pcap_ISCX.csv",
+  "total_rows": 692703,
+  "labels": {
+    "BENIGN": 440031,
+    "DoS Hulk": 231073,
+    "DoS GoldenEye": 10293,
+    "DoS slowloris": 5796,
+    "DoS Slowhttptest": 5499,
+    "Heartbleed": 11
+  },
+  "duplicate_rows": 81909,
+  "duplicate_pct": 11.82,
+  "cols_with_nan": {
+    "Flow Bytes/s": 1008
+  },
+  "cols_with_inf": {
+    "Flow Bytes/s": 289,
+    "Flow Packets/s": 1297
+  },
+  "inf_zero_dur": 1297,
+  "heartbleed_count": 11,
+  "heartbleed_ports": {
+    "444": 11
+  },
+  "hulk_count": 231073,
+  "goldeneye_count": 10293,
+  "slowloris_count": 5796,
+  "slowhttptest_count": 5499
+}

@@ -1,0 +1,28 @@
+{
+  "dataset": "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+  "total_rows": 288602,
+  "labels": {
+    "BENIGN": 288566,
+    "Infiltration": 36
+  },
+  "duplicate_rows": 35630,
+  "duplicate_pct": 12.35,
+  "cols_with_nan": {
+    "Flow Bytes/s": 18
+  },
+  "cols_with_inf": {
+    "Flow Bytes/s": 189,
+    "Flow Packets/s": 207
+  },
+  "infil_ports": {
+    "444": 36
+  },
+  "fwd_urg_counts": {
+    "0": 288287,
+    "1": 315
+  },
+  "cwe_counts": {
+    "0": 288287,
+    "1": 315
+  }
+}

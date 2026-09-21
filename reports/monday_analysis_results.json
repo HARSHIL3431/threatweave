@@ -1,0 +1,96 @@
+{
+  "dataset": "Monday-WorkingHours.pcap_ISCX.csv",
+  "total_rows": 529918,
+  "total_cols": 79,
+  "duplicate_rows": 26935,
+  "duplicate_pct": 5.08,
+  "cols_with_nan": {
+    "Flow Bytes/s": 64
+  },
+  "cols_with_inf": {
+    "Flow Bytes/s": 373,
+    "Flow Packets/s": 437
+  },
+  "inf_zero_duration": 437,
+  "constant_features": [
+    "Bwd PSH Flags",
+    "Fwd URG Flags",
+    "Bwd URG Flags",
+    "CWE Flag Count",
+    "Fwd Avg Bytes/Bulk",
+    "Fwd Avg Packets/Bulk",
+    "Fwd Avg Bulk Rate",
+    "Bwd Avg Bytes/Bulk",
+    "Bwd Avg Packets/Bulk",
+    "Bwd Avg Bulk Rate"
+  ],
+  "near_zero_var": [],
+  "top_ports": {
+    "53": 214674,
+    "443": 140952,
+    "80": 50834,
+    "123": 5180,
+    "22": 2132,
+    "137": 1522,
+    "389": 1215,
+    "88": 1207,
+    "21": 960,
+    "465": 728
+  },
+  "bidirectional_pct": 85.41,
+  "fwd_only_pct": 14.59,
+  "zero_dur_cnt": 437,
+  "high_corr_count": 63,
+  "high_corr_top": [
+    {
+      "Feature_1": "Total Fwd Packets",
+      "Feature_2": "Total Backward Packets",
+      "Pearson_r": 0.9993
+    },
+    {
+      "Feature_1": "Total Fwd Packets",
+      "Feature_2": "Total Length of Bwd Packets",
+      "Pearson_r": 0.999
+    },
+    {
+      "Feature_1": "Total Backward Packets",
+      "Feature_2": "Total Length of Bwd Packets",
+      "Pearson_r": 0.9973
+    },
+    {
+      "Feature_1": "Fwd Packet Length Max",
+      "Feature_2": "Fwd Packet Length Std",
+      "Pearson_r": 0.944
+    },
+    {
+      "Feature_1": "Bwd Packet Length Max",
+      "Feature_2": "Bwd Packet Length Std",
+      "Pearson_r": 0.9392
+    },
+    {
+      "Feature_1": "Flow Duration",
+      "Feature_2": "Fwd IAT Total",
+      "Pearson_r": 0.9974
+    },
+    {
+      "Feature_1": "Flow IAT Max",
+      "Feature_2": "Fwd IAT Max",
+      "Pearson_r": 0.9925
+    },
+    {
+      "Feature_1": "Fwd IAT Mean",
+      "Feature_2": "Fwd IAT Min",
+      "Pearson_r": 0.9735
+    },
+    {
+      "Feature_1": "Flow Duration",
+      "Feature_2": "Bwd IAT Total",
+      "Pearson_r": 0.972
+    },
+    {
+      "Feature_1": "Fwd IAT Total",
+      "Feature_2": "Bwd IAT Total",
+      "Pearson_r": 0.969
+    }
+  ]
+}

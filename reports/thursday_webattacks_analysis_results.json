@@ -1,0 +1,27 @@
+{
+  "dataset": "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+  "total_rows": 170366,
+  "labels_raw": {
+    "'BENIGN'": 168186,
+    "'Web Attack \u00ef\u00bf\u00bd Brute Force'": 1507,
+    "'Web Attack \u00ef\u00bf\u00bd XSS'": 652,
+    "'Web Attack \u00ef\u00bf\u00bd Sql Injection'": 21
+  },
+  "labels_normalized": {
+    "BENIGN": 168186,
+    "Web Attack - Brute Force": 1507,
+    "Web Attack - XSS": 652,
+    "Web Attack - Sql Injection": 21
+  },
+  "duplicate_rows": 6066,
+  "duplicate_pct": 3.56,
+  "cols_with_nan": {
+    "Flow Bytes/s": 20
+  },
+  "cols_with_inf": {
+    "Flow Bytes/s": 115,
+    "Flow Packets/s": 135
+  },
+  "inf_zero_dur": 135,
+  "sqli_count": 21
+}

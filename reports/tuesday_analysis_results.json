@@ -1,0 +1,23 @@
+{
+  "dataset": "Tuesday-WorkingHours.pcap_ISCX.csv",
+  "total_rows": 445909,
+  "labels": {
+    "BENIGN": 432074,
+    "FTP-Patator": 7938,
+    "SSH-Patator": 5897
+  },
+  "duplicate_rows": 24065,
+  "duplicate_pct": 5.4,
+  "cols_with_nan": {
+    "Flow Bytes/s": 201
+  },
+  "cols_with_inf": {
+    "Flow Bytes/s": 63,
+    "Flow Packets/s": 264
+  },
+  "inf_zero_dur": 264,
+  "benign_p21": 1059,
+  "ftp_pat_p21": 7938,
+  "benign_p22": 2136,
+  "ssh_pat_p22": 5897
+}

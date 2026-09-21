@@ -1,0 +1,457 @@
+{
+  "experiment_name": "with_port",
+  "timestamp": "2026-08-22T21:09:31.506593",
+  "config": {
+    "data_path": "../data/combined/CICIDS2017_COMBINED_RAW.csv",
+    "include_port": true,
+    "apply_scaling": false,
+    "initial_contamination": 0.01,
+    "tuned_contamination": 0.1,
+    "frozen_threshold": 0.5219193851693676,
+    "threshold_method": "IsolationForest offset_ (contamination quantile of Monday training scores)",
+    "contamination_selection": "max validation F1, tie-break min FPR",
+    "contamination_grid_results": [
+      {
+        "contamination": 0.001,
+        "threshold": 0.6373206259767326,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "fpr": 0.0014371994726229253,
+        "tp": 0,
+        "fp": 593,
+        "fn": 9152,
+        "tn": 412015
+      },
+      {
+        "contamination": 0.005,
+        "threshold": 0.613378047177342,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "fpr": 0.00572940902745463,
+        "tp": 0,
+        "fp": 2364,
+        "fn": 9152,
+        "tn": 410244
+      },
+      {
+        "contamination": 0.01,
+        "threshold": 0.6018957873735028,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "fpr": 0.011655130293159609,
+        "tp": 0,
+        "fp": 4809,
+        "fn": 9152,
+        "tn": 407799
+      },
+      {
+        "contamination": 0.02,
+        "threshold": 0.5883664998200001,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "fpr": 0.022883705599503645,
+        "tp": 0,
+        "fp": 9442,
+        "fn": 9152,
+        "tn": 403166
+      },
+      {
+        "contamination": 0.05,
+        "threshold": 0.5626453669166115,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "fpr": 0.054448774623856055,
+        "tp": 0,
+        "fp": 22466,
+        "fn": 9152,
+        "tn": 390142
+      },
+      {
+        "contamination": 0.1,
+        "threshold": 0.5219193851693676,
+        "precision": 4.23396913436501e-05,
+        "recall": 0.00021853146853146853,
+        "f1": 7.093582081611662e-05,
+        "fpr": 0.11447911819450908,
+        "tp": 2,
+        "fp": 47235,
+        "fn": 9150,
+        "tn": 365373
+      }
+    ],
+    "tune_on_val": true,
+    "random_seed": 42,
+    "train_day": "Monday",
+    "val_day": "Tuesday",
+    "test_days": [
+      "Wednesday",
+      "Thursday-Morning",
+      "Thursday-Afternoon",
+      "Friday-Morning",
+      "Friday-PortScan",
+      "Friday-DDoS"
+    ]
+  },
+  "training": {
+    "samples": 502981,
+    "features": 60,
+    "feature_names": [
+      "Destination Port",
+      "Flow Duration",
+      "Total Fwd Packets",
+      "Total Backward Packets",
+      "Total Length of Fwd Packets",
+      "Total Length of Bwd Packets",
+      "Fwd Packet Length Max",
+      "Fwd Packet Length Min",
+      "Fwd Packet Length Mean",
+      "Fwd Packet Length Std",
+      "Bwd Packet Length Max",
+      "Bwd Packet Length Min",
+      "Bwd Packet Length Mean",
+      "Bwd Packet Length Std",
+      "Flow Bytes/s",
+      "Flow Packets/s",
+      "Flow IAT Mean",
+      "Flow IAT Std",
+      "Flow IAT Max",
+      "Flow IAT Min",
+      "Fwd IAT Total",
+      "Fwd IAT Mean",
+      "Fwd IAT Std",
+      "Fwd IAT Max",
+      "Fwd IAT Min",
+      "Bwd IAT Total",
+      "Bwd IAT Mean",
+      "Bwd IAT Std",
+      "Bwd IAT Max",
+      "Bwd IAT Min",
+      "Fwd PSH Flags",
+      "Fwd URG Flags",
+      "Fwd Header Length",
+      "Fwd Packets/s",
+      "Bwd Packets/s",
+      "Min Packet Length",
+      "Max Packet Length",
+      "Packet Length Mean",
+      "Packet Length Std",
+      "Packet Length Variance",
+      "FIN Flag Count",
+      "RST Flag Count",
+      "PSH Flag Count",
+      "ACK Flag Count",
+      "URG Flag Count",
+      "Down/Up Ratio",
+      "Average Packet Size",
+      "Init_Win_bytes_forward",
+      "Init_Win_bytes_backward",
+      "act_data_pkt_fwd",
+      "min_seg_size_forward",
+      "Active Mean",
+      "Active Std",
+      "Active Max",
+      "Active Min",
+      "Idle Mean",
+      "Idle Std",
+      "Idle Max",
+      "Idle Min",
+      "Is_Zero_Duration"
+    ],
+    "train_time_seconds": 3.231546401977539
+  },
+  "validation_results": {
+    "split_name": "Tuesday-Validation",
+    "total_samples": 421760,
+    "attack_samples": 9152,
+    "benign_samples": 412608,
+    "attack_ratio": 0.021699544764795145,
+    "precision": 4.23396913436501e-05,
+    "recall": 0.00021853146853146853,
+    "f1": 7.093582081611662e-05,
+    "fpr": 0.11447911819450908,
+    "pr_auc": 0.03972951969629967,
+    "roc_auc": 0.7343633189091378,
+    "tp": 2,
+    "fp": 47235,
+    "fn": 9150,
+    "tn": 365373,
+    "threshold_used": "model_default",
+    "contamination": 0.1,
+    "attack_recall": {
+      "FTP-Patator": 0.0,
+      "SSH-Patator": 0.0006213109661385523
+    },
+    "attack_precision": {
+      "FTP-Patator": 0.0,
+      "SSH-Patator": 4.23396913436501e-05
+    },
+    "attack_counts": {
+      "FTP-Patator": {
+        "samples": 5933,
+        "tp": 0,
+        "fn": 5933,
+        "recall": 0.0
+      },
+      "SSH-Patator": {
+        "samples": 3219,
+        "tp": 2,
+        "fn": 3217,
+        "recall": 0.0006213109661385523
+      }
+    }
+  },
+  "test_results": {
+    "Wednesday": {
+      "split_name": "Wednesday",
+      "total_samples": 602393,
+      "attack_samples": 193628,
+      "benign_samples": 408765,
+      "attack_ratio": 0.32143135793410615,
+      "precision": 0.781800999054948,
+      "recall": 0.8972049496973579,
+      "f1": 0.8355369158181792,
+      "fpr": 0.11861583061172067,
+      "pr_auc": 0.86046911086284,
+      "roc_auc": 0.9492735076799281,
+      "tp": 173724,
+      "fp": 48486,
+      "fn": 19904,
+      "tn": 360279,
+      "threshold_used": "model_default",
+      "contamination": 0.1,
+      "attack_recall": {
+        "DoS slowloris": 0.6175705794947994,
+        "DoS Slowhttptest": 0.9273144605967866,
+        "DoS Hulk": 0.9027090244848569,
+        "DoS GoldenEye": 0.9357378961695508,
+        "Heartbleed": 1.0
+      },
+      "attack_precision": {
+        "DoS slowloris": 0.014963322982764052,
+        "DoS Slowhttptest": 0.02181719994599703,
+        "DoS Hulk": 0.7016560910850097,
+        "DoS GoldenEye": 0.043314882318527516,
+        "Heartbleed": 4.9502722649745736e-05
+      },
+      "attack_counts": {
+        "DoS slowloris": {
+          "samples": 5384,
+          "tp": 3325,
+          "fn": 2059,
+          "recall": 0.6175705794947994
+        },
+        "DoS Slowhttptest": {
+          "samples": 5228,
+          "tp": 4848,
+          "fn": 380,
+          "recall": 0.9273144605967866
+        },
+        "DoS Hulk": {
+          "samples": 172719,
+          "tp": 155915,
+          "fn": 16804,
+          "recall": 0.9027090244848569
+        },
+        "DoS GoldenEye": {
+          "samples": 10286,
+          "tp": 9625,
+          "fn": 661,
+          "recall": 0.9357378961695508
+        },
+        "Heartbleed": {
+          "samples": 11,
+          "tp": 11,
+          "fn": 0,
+          "recall": 1.0
+        }
+      }
+    },
+    "Thursday-Morning": {
+      "split_name": "Thursday-Morning",
+      "total_samples": 156251,
+      "attack_samples": 2143,
+      "benign_samples": 154108,
+      "attack_ratio": 0.013715112223281771,
+      "precision": 0.006665384861885535,
+      "recall": 0.0485300979934671,
+      "f1": 0.011720951200270483,
+      "fpr": 0.10057232590131596,
+      "pr_auc": 0.033836680283079706,
+      "roc_auc": 0.7677352018772589,
+      "tp": 104,
+      "fp": 15499,
+      "fn": 2039,
+      "tn": 138609,
+      "threshold_used": "model_default",
+      "contamination": 0.1,
+      "attack_recall": {
+        "Web Attack - Brute Force": 0.05170068027210884,
+        "Web Attack - XSS": 0.032208588957055216,
+        "Web Attack - Sql Injection": 0.3333333333333333
+      },
+      "attack_precision": {
+        "Web Attack - Brute Force": 0.004870858168300967,
+        "Web Attack - XSS": 0.0013458950201884253,
+        "Web Attack - Sql Injection": 0.00044863167339614175
+      },
+      "attack_counts": {
+        "Web Attack - Brute Force": {
+          "samples": 1470,
+          "tp": 76,
+          "fn": 1394,
+          "recall": 0.05170068027210884
+        },
+        "Web Attack - XSS": {
+          "samples": 652,
+          "tp": 21,
+          "fn": 631,
+          "recall": 0.032208588957055216
+        },
+        "Web Attack - Sql Injection": {
+          "samples": 21,
+          "tp": 7,
+          "fn": 14,
+          "recall": 0.3333333333333333
+        }
+      }
+    },
+    "Thursday-Afternoon": {
+      "split_name": "Thursday-Afternoon",
+      "total_samples": 241859,
+      "attack_samples": 36,
+      "benign_samples": 241823,
+      "attack_ratio": 0.00014884705551581706,
+      "precision": 0.0014562664967689087,
+      "recall": 0.8888888888888888,
+      "f1": 0.0029077691958200817,
+      "fpr": 0.09073578609148013,
+      "pr_auc": 0.003440379173650862,
+      "roc_auc": 0.9299944817306688,
+      "tp": 32,
+      "fp": 21942,
+      "fn": 4,
+      "tn": 219881,
+      "threshold_used": "model_default",
+      "contamination": 0.1,
+      "attack_recall": {
+        "Infiltration": 0.8888888888888888
+      },
+      "attack_precision": {
+        "Infiltration": 0.0014562664967689087
+      },
+      "attack_counts": {
+        "Infiltration": {
+          "samples": 36,
+          "tp": 32,
+          "fn": 4,
+          "recall": 0.8888888888888888
+        }
+      }
+    },
+    "Friday-Morning": {
+      "split_name": "Friday-Morning",
+      "total_samples": 173035,
+      "attack_samples": 1953,
+      "benign_samples": 171082,
+      "attack_ratio": 0.011286733897766348,
+      "precision": 0.02113032049337782,
+      "recall": 0.21402969790066564,
+      "f1": 0.03846330802852542,
+      "fpr": 0.11318548999894787,
+      "pr_auc": 0.01832253040306909,
+      "roc_auc": 0.6478648159861394,
+      "tp": 418,
+      "fp": 19364,
+      "fn": 1535,
+      "tn": 151718,
+      "threshold_used": "model_default",
+      "contamination": 0.1,
+      "attack_recall": {
+        "Bot": 0.21402969790066564
+      },
+      "attack_precision": {
+        "Bot": 0.02113032049337782
+      },
+      "attack_counts": {
+        "Bot": {
+          "samples": 1953,
+          "tp": 418,
+          "fn": 1535,
+          "recall": 0.21402969790066564
+        }
+      }
+    },
+    "Friday-PortScan": {
+      "split_name": "Friday-PortScan",
+      "total_samples": 204927,
+      "attack_samples": 90255,
+      "benign_samples": 114672,
+      "attack_ratio": 0.44042512699644265,
+      "precision": 0.05716684475652572,
+      "recall": 0.008298709212785995,
+      "f1": 0.01449345472488559,
+      "fpr": 0.10772464071438538,
+      "pr_auc": 0.5074917439259481,
+      "roc_auc": 0.6945368839379074,
+      "tp": 749,
+      "fp": 12353,
+      "fn": 89506,
+      "tn": 102319,
+      "threshold_used": "model_default",
+      "contamination": 0.1,
+      "attack_recall": {
+        "PortScan": 0.008298709212785995
+      },
+      "attack_precision": {
+        "PortScan": 0.05716684475652572
+      },
+      "attack_counts": {
+        "PortScan": {
+          "samples": 90255,
+          "tp": 749,
+          "fn": 89506,
+          "recall": 0.008298709212785995
+        }
+      }
+    },
+    "Friday-DDoS": {
+      "split_name": "Friday-DDoS",
+      "total_samples": 217761,
+      "attack_samples": 128013,
+      "benign_samples": 89748,
+      "attack_ratio": 0.5878600851392123,
+      "precision": 0.6942252103023807,
+      "recall": 0.6678852928999398,
+      "f1": 0.6808005765042661,
+      "fpr": 0.4195970940856621,
+      "pr_auc": 0.654126654170008,
+      "roc_auc": 0.6970051099598048,
+      "tp": 85498,
+      "fp": 37658,
+      "fn": 42515,
+      "tn": 52090,
+      "threshold_used": "model_default",
+      "contamination": 0.1,
+      "attack_recall": {
+        "DDoS": 0.6678852928999398
+      },
+      "attack_precision": {
+        "DDoS": 0.6942252103023807
+      },
+      "attack_counts": {
+        "DDoS": {
+          "samples": 128013,
+          "tp": 85498,
+          "fn": 42515,
+          "recall": 0.6678852928999398
+        }
+      }
+    }
+  },
+  "elapsed_seconds": 305.2786314487457
+}

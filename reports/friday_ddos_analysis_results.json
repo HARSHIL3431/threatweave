@@ -1,0 +1,23 @@
+{
+  "dataset": "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+  "total_rows": 225745,
+  "labels": {
+    "DDoS": 128027,
+    "BENIGN": 97718
+  },
+  "duplicate_rows": 2633,
+  "duplicate_pct": 1.17,
+  "cols_with_nan": {
+    "Flow Bytes/s": 4
+  },
+  "cols_with_inf": {
+    "Flow Bytes/s": 30,
+    "Flow Packets/s": 34
+  },
+  "ddos_ports": {
+    "80": 128024,
+    "64869": 1,
+    "64873": 1,
+    "27636": 1
+  }
+}
