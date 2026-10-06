@@ -43,3 +43,17 @@ scripts/*.txt
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Frontend runtime artifacts
+frontend/logs/
+frontend/.next/
+frontend/out/
+logs/
+*.pid
+
+# Local backups and file snapshots (kept locally, not versioned)
+_backup/
+_snapshots/
+
+# Design reference kept locally (also copied into frontend/docs/reference)
+design-reference/

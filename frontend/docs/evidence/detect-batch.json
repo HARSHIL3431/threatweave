@@ -1,0 +1,65 @@
+{
+  "batch_id": "9f1cdd40-8478-414c-b8d1-99350f52eb00",
+  "count": 2,
+  "results": [
+    {
+      "request_id": "9f1cdd40-8478-414c-b8d1-99350f52eb00-0",
+      "detection": {
+        "is_anomaly": false,
+        "anomaly_score": 0.451762,
+        "threshold": 0.521919,
+        "experiment_id": "with_port",
+        "operating_point": "OP-A"
+      },
+      "severity": {
+        "level": "info",
+        "risk_score": 0.451762,
+        "calibration_note": "INITIAL PLACEHOLDER CALIBRATION"
+      },
+      "attack_context": {
+        "mitre_techniques": [],
+        "retrieved_context": []
+      },
+      "explanation": {
+        "summary": null,
+        "reasoning": null,
+        "recommendations": []
+      },
+      "metadata": {
+        "model_version": "isolation_forest_v1",
+        "source_dataset": "CICIDS2017",
+        "timestamp": "2026-10-06T15:41:17.740338+00:00"
+      }
+    },
+    {
+      "request_id": "9f1cdd40-8478-414c-b8d1-99350f52eb00-1",
+      "detection": {
+        "is_anomaly": true,
+        "anomaly_score": 0.540229,
+        "threshold": 0.521919,
+        "experiment_id": "with_port",
+        "operating_point": "OP-A"
+      },
+      "severity": {
+        "level": "medium",
+        "risk_score": 0.540229,
+        "calibration_note": "INITIAL PLACEHOLDER CALIBRATION"
+      },
+      "attack_context": {
+        "mitre_techniques": [],
+        "retrieved_context": []
+      },
+      "explanation": {
+        "summary": null,
+        "reasoning": null,
+        "recommendations": []
+      },
+      "metadata": {
+        "model_version": "isolation_forest_v1",
+        "source_dataset": "CICIDS2017",
+        "timestamp": "2026-10-06T15:41:17.740338+00:00"
+      }
+    }
+  ],
+  "timestamp": "2026-10-06T15:41:17.740338+00:00"
+}

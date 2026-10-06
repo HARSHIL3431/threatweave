@@ -1,0 +1,29 @@
+{
+  "request_id": "c3c971a4-47d3-4b69-a78c-30bdf1b5e347",
+  "detection": {
+    "is_anomaly": false,
+    "anomaly_score": 0.451762,
+    "threshold": 0.521919,
+    "experiment_id": "with_port",
+    "operating_point": "OP-A"
+  },
+  "severity": {
+    "level": "info",
+    "risk_score": 0.451762,
+    "calibration_note": "INITIAL PLACEHOLDER CALIBRATION"
+  },
+  "attack_context": {
+    "mitre_techniques": [],
+    "retrieved_context": []
+  },
+  "explanation": {
+    "summary": null,
+    "reasoning": null,
+    "recommendations": []
+  },
+  "metadata": {
+    "model_version": "isolation_forest_v1",
+    "source_dataset": "CICIDS2017",
+    "timestamp": "2026-10-06T15:41:11.591822+00:00"
+  }
+}

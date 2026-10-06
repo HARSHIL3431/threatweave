@@ -73,7 +73,7 @@ Supported settings include:
 ```powershell
 cd backend
 uvicorn app.main:app --reload
-```
+``
 
 The default local URLs are:
 
