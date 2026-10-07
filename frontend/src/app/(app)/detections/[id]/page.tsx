@@ -3,6 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { MOCK_DETECTIONS } from "@/lib/data/detections";
+import { downloadIncidentReport } from "@/lib/report";
 import { Gauge } from "@/components/charts/charts";
 import { TechniqueChip } from "@/components/ui/technique-chip";
 import { ConfidenceBadge } from "@/components/ui/confidence-badge";
@@ -19,16 +20,11 @@ export default function DetectionDetails() {
   const next = MOCK_DETECTIONS[(idx + 1) % MOCK_DETECTIONS.length];
 
   const exportPdf = async () => {
-    const { jsPDF } = await import("jspdf");
-    const doc = new jsPDF();
-    doc.setFontSize(16);
-    doc.text("Security Incident Report", 20, 20);
-    doc.setFontSize(11);
-    doc.text(`Type: ${d.type}    Severity: ${d.severity}    Score: ${d.score}`, 20, 32);
-    doc.text(`Source: ${d.srcIp}:${d.srcPort}    Destination: ${d.dstIp}:${d.dstPort}`, 20, 40);
-    doc.text(`MITRE: ${d.mitre.primary.id} ${d.mitre.primary.name} (${d.mitre.primary.confidence} confidence)`, 20, 48);
-    doc.text(doc.splitTextToSize(d.aiAnalysis || "No AI analysis available.", 170), 20, 60);
-    doc.save(`incident-${d.id}.pdf`);
+    try {
+      await downloadIncidentReport(d);
+    } catch {
+      window.alert("Failed to generate the PDF report. Please try again.");
+    }
   };
 
   const maxFI = Math.max(...d.featureImportance.map((f) => f.value), 0.01);
@@ -77,7 +73,7 @@ export default function DetectionDetails() {
             ))}
           </div>
         </div>
-        <div className="rounded-2xl border p-5 text-center" style={{ background: "var(--surface)", borderColor: "var(--border)" }}>
+        <div className="flex flex-col items-center justify-center rounded-2xl border p-5 text-center" style={{ background: "var(--surface)", borderColor: "var(--border)" }}>
           <Gauge value={d.score} />
         </div>
         <div className="rounded-2xl border p-5" style={{ background: "var(--surface)", borderColor: "var(--border)" }}>
