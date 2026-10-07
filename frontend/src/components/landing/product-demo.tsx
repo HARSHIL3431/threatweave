@@ -1,10 +1,32 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { Play, Activity, LayoutGrid, FileCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { IconTile } from "@/components/ui/icon-tile";
 
 export function ProductDemo() {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const [started, setStarted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const startPlayback = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    v.play().then(() => {
+      setStarted(true);
+      setError(null);
+    }).catch(() => setError("Unable to play the demo video. Please try again."));
+  };
+
+  useEffect(() => {
+    const onPlayDemo = () => startPlayback();
+    window.addEventListener("threatweave:play-demo", onPlayDemo);
+    return () => window.removeEventListener("threatweave:play-demo", onPlayDemo);
+  }, []);
+
   return (
     <section id="platform" className="mx-auto grid max-w-[1360px] gap-12 px-6 py-16 lg:grid-cols-[1fr_1.4fr_1fr]">
       <div>
@@ -31,19 +53,36 @@ export function ProductDemo() {
             </div>
           ))}
         </div>
-        <div className="mt-8"><Button>▶ Watch Full Demo</Button></div>
+        <div className="mt-8"><Button onClick={startPlayback}>▶ Watch Full Demo</Button></div>
       </div>
-      <div className="relative flex items-center justify-center">
+      <div ref={sectionRef} className="relative flex items-center justify-center">
         <div className="w-full max-w-[720px] rounded-[26px] border p-3" style={{ background: "#C9CED6", borderColor: "var(--border)" }}>
           <div className="overflow-hidden rounded-[18px] border" style={{ background: "var(--bg)", borderColor: "var(--border)" }}>
-            <div className="flex h-[300px] items-center justify-center text-sm" style={{ color: "var(--text-subtle)" }}>
-              Dashboard preview
-            </div>
+            <video
+              ref={videoRef}
+              src="/videos/threatweave-demo.mp4"
+              controls
+              playsInline
+              preload="metadata"
+              aria-label="ThreatWeave product demo video"
+              className="block aspect-video w-full"
+              onEnded={() => setStarted(false)}
+              onError={() => setError("Demo video failed to load. Please try again later.")}
+            />
+            {error && (
+              <p role="alert" className="p-4 text-sm" style={{ color: "var(--brand)" }}>{error}</p>
+            )}
           </div>
         </div>
-        <button aria-label="Play demo" className="absolute grid h-16 w-16 place-items-center rounded-full bg-white shadow-xl">
-          <Play size={26} style={{ color: "var(--brand)" }} fill="currentColor" />
-        </button>
+        {!started && (
+          <button
+            aria-label="Play demo video"
+            onClick={startPlayback}
+            className="absolute grid h-16 w-16 place-items-center rounded-full bg-white shadow-xl"
+          >
+            <Play size={26} style={{ color: "var(--brand)" }} fill="currentColor" />
+          </button>
+        )}
       </div>
       <div className="space-y-5">
         <p className="font-hand text-2xl" style={{ color: "var(--brand)", fontFamily: "var(--font-caveat), cursive" }}>

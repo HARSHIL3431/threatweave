@@ -1,3 +1,6 @@
+"use client";
+
+import Link from "next/link";
 import { Play, Shield, BarChart3, Zap } from "lucide-react";
 import { EyebrowBadge } from "@/components/brand/eyebrow-badge";
 import { TwoToneHeading } from "@/components/brand/two-tone-heading";
@@ -12,8 +15,8 @@ export function FinalCta() {
         Experience real-time detection, MITRE ATT&amp;CK mapping, and AI-powered analysis with THREATWEAVE.
       </p>
       <div className="mt-8 flex justify-center gap-3">
-        <Button><Play size={16} /> Get Started</Button>
-        <Button variant="outline">Watch Demo</Button>
+        <Link href="/dashboard"><Button><Play size={16} /> Get Started</Button></Link>
+        <Button variant="outline" onClick={() => window.dispatchEvent(new Event("threatweave:play-demo"))}>Watch Demo</Button>
       </div>
       <div className="mx-auto mt-12 grid max-w-3xl grid-cols-3 divide-x" style={{ borderColor: "var(--border)" }}>
         {[
