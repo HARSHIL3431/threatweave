@@ -19,9 +19,9 @@ export function Navbar() {
     <header className="sticky top-4 z-40 mx-auto flex max-w-[1360px] items-center justify-between rounded-[20px] border px-6 py-3 backdrop-blur-md"
       style={{ borderColor: "var(--border)", background: "color-mix(in srgb, var(--surface) 75%, transparent)" }}>
       <Link href="/"><Logo /></Link>
-      <nav className="hidden items-center gap-7 md:flex">
+      <nav className="hidden items-center gap-7 lg:flex">
         {links.map((l) => (
-          <a key={l.label} href={l.href} className="text-sm font-medium" style={{ color: "var(--text-muted)" }}>
+          <a key={l.label} href={l.href} className="whitespace-nowrap text-sm font-medium" style={{ color: "var(--text-muted)" }}>
             {l.label}
           </a>
         ))}
