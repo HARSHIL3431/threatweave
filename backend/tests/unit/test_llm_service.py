@@ -4,7 +4,9 @@ These tests never call a real LLM API: a canned FakeProvider returns raw
 strings, letting us exercise every validation and failure path with zero cost.
 """
 import json
+import os
 
+import httpx
 import pytest
 
 from app.core.exceptions import (
@@ -271,6 +273,18 @@ def test_mock_provider_factory_and_service_integration():
 
 # --------------------------------------------------------------------------- #
 # Backward-compat explain hook (detection flow) stays a no-op
+# --------------------------------------------------------------------------- #def test_explain_hook_never_calls_provider_even_when_enabled():
+    provider = FakeProvider(_valid_json())
+    service = LLMService(enabled=True, provider=provider)
+    exp = service.explain({}, 0.8, True)
+    assert isinstance(exp, LLMExplanation)
+    assert exp.summary is None
+    assert exp.recommendations == []
+    assert provider.calls == 0
+
+
+# --------------------------------------------------------------------------- #
+# Backward-compat explain hook (detection flow) stays a no-op
 # --------------------------------------------------------------------------- #
 def test_explain_hook_never_calls_provider_even_when_enabled():
     provider = FakeProvider(_valid_json())
@@ -280,3 +294,95 @@ def test_explain_hook_never_calls_provider_even_when_enabled():
     assert exp.summary is None
     assert exp.recommendations == []
     assert provider.calls == 0
+
+
+# --------------------------------------------------------------------------- #
+# OpenAIProvider HTTP mapping - deterministic via MockTransport (no network)
+# --------------------------------------------------------------------------- #
+def _patched_client(monkeypatch, handler=None, exc=None):
+    """Replace httpx.Client with a MockTransport-backed (or raising) factory."""
+    real_client = httpx.Client
+
+    def factory(*args, **kwargs):
+        if exc is not None:
+            raise exc
+        return real_client(
+            transport=httpx.MockTransport(handler), timeout=kwargs.get("timeout")
+        )
+
+    monkeypatch.setattr(httpx, "Client", factory)
+
+
+def _openai_service():
+    return LLMService(enabled=True, provider=OpenAIProvider(api_key="test-key", timeout=5.0))
+
+
+def test_openai_provider_maps_http_401_to_provider_error(monkeypatch):
+    _patched_client(
+        monkeypatch,
+        handler=lambda req: httpx.Response(401, json={"error": {"message": "bad key"}}),
+    )
+    with pytest.raises(LLMProviderErrorException) as exc:
+        _openai_service().generate_explanation(_evidence())
+    assert "401" in str(exc.value)
+
+
+def test_openai_provider_rejects_unexpected_response_shape(monkeypatch):
+    _patched_client(
+        monkeypatch, handler=lambda req: httpx.Response(200, json={"foo": "bar"})
+    )
+    with pytest.raises(LLMProviderErrorException) as exc:
+        _openai_service().generate_explanation(_evidence())
+    assert "unexpected response shape" in str(exc.value)
+
+
+def test_openai_provider_rejects_empty_content(monkeypatch):
+    _patched_client(
+        monkeypatch,
+        handler=lambda req: httpx.Response(
+            200, json={"choices": [{"message": {"content": "   "}}]}
+        ),
+    )
+    with pytest.raises(LLMProviderErrorException) as exc:
+        _openai_service().generate_explanation(_evidence())
+    assert "empty response" in str(exc.value)
+
+
+def test_openai_provider_maps_timeout(monkeypatch):
+    _patched_client(monkeypatch, exc=httpx.TimeoutException("slow"))
+    with pytest.raises(LLMTimeoutException):
+        _openai_service().generate_explanation(_evidence())
+
+
+def test_openai_provider_returns_content_verbatim_on_success(monkeypatch):
+    _patched_client(
+        monkeypatch,
+        handler=lambda req: httpx.Response(
+            200, json={"choices": [{"message": {"content": _valid_json()}}]}
+        ),
+    )
+    out, _ = _openai_service().generate_explanation(_evidence())
+    assert out.summary == "Anomalous flow observed."
+    assert out.potential_attack_context[0].technique_id == "T1046"
+
+
+# --------------------------------------------------------------------------- #
+# Test-harness isolation - the ordinary suite must never see a real credential
+# --------------------------------------------------------------------------- #
+def test_suite_process_carries_no_real_credential():
+    if os.environ.get("THREATWEAVE_REAL_LLM_TEST") == "1" and os.environ.get("LLM_API_KEY"):
+        pytest.skip("opt-in real-provider run: credential intentionally present")
+    assert os.environ.get("LLM_API_KEY", "") == ""
+
+
+def test_openai_provider_error_hides_configured_key(monkeypatch):
+    secret = "test-secret-must-not-leak-12345"
+    _patched_client(
+        monkeypatch,
+        handler=lambda req: httpx.Response(401, json={"error": {"message": "bad key"}}),
+    )
+    service = LLMService(enabled=True, provider=OpenAIProvider(api_key=secret, timeout=5.0))
+    with pytest.raises(LLMProviderErrorException) as exc:
+        service.generate_explanation(_evidence())
+    assert secret not in str(exc.value)
+    assert secret not in json.dumps(exc.value.details)

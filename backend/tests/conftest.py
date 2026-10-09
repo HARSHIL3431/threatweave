@@ -1,7 +1,28 @@
 import json
+import os
 from pathlib import Path
 from typing import Any, Dict
 import hashlib
+
+# Test-environment isolation (must run before any app.* import creates Settings).
+# Local backend/.env may enable services or hold real credentials; the suite must
+# stay deterministic, offline, and secret-free. Process env outranks the .env file
+# in pydantic-settings, so these entries shadow local development values.
+# LLM_API_KEY is force-cleared (not setdefault): an exported shell variable must
+# never leak a real credential into the ordinary suite. The opt-in real-provider
+# test reads the key directly and only runs when explicitly enabled.
+_OPT_IN_REAL_LLM = os.environ.get("THREATWEAVE_REAL_LLM_TEST") == "1" and bool(
+    os.environ.get("LLM_API_KEY")
+)
+if not _OPT_IN_REAL_LLM:
+    os.environ["LLM_API_KEY"] = ""
+else:
+    os.environ.setdefault("LLM_API_KEY", "")
+os.environ.setdefault("LLM_PROVIDER", "mock")
+os.environ.setdefault("LLM_ENABLED", "false")
+os.environ.setdefault("RAG_ENABLED", "false")
+os.environ.setdefault("MITRE_ENABLED", "false")
+os.environ.setdefault("ACTIVE_OPERATING_POINT", "OP-A")
 
 import numpy as np
 import pytest
