@@ -54,6 +54,12 @@
 - UI smoke suite (`scripts/smoke-ui.cjs`): all 9 routes × 2 themes → PASS, status 200, zero console errors, key text present; screenshots in `docs/screenshots/smoke/`.
 - API smoke suite (`scripts/smoke-api.cjs`): health/detect×3/batch/invalid-422 → all PASS (scores match fixture expectations: 0.451762/info, 0.540229/medium, 0.458718/info).
 
+## Post-cutover (2026-10-09) — DONE
+- Backend: RAG (FAISS, 697 docs) + `/rag/*`, grounded LLM `/explain` (`openai`/`mock`), server-side PDF `/reports/*`; suite 132 passed (87 unit + 45 integration) after the approved `httpx>=0.27.0,<0.28` pin (Starlette 0.36 TestClient compat).
+- Frontend: live Reports workflow (detect → explain → backend PDF), live MITRE search, browser-session detection store backing dashboard/analytics with labeled empty states; `d1–d5` fixtures labeled, unknown ids → not-found.
+- Gates re-verified: `npx tsc --noEmit` clean, `npm run lint` clean, `npm run build` ✓ (9 routes).
+- Root contract docs (`API_CONTRACT.md`, `ARCHITECTURE.md`, `backend/README.md`, `TASKS.md`, root `README.md`) synchronized with the 8-route implementation.
+
 
 
 

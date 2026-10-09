@@ -1,4 +1,4 @@
-# Backend Audit (P-1)
+# Backend Audit (P-1; routes extended since — see update note at end)
 
 Real captures saved under `docs/evidence/` (health.json, detect-*.json, detect-batch.json, detect-error.json).
 
@@ -42,3 +42,14 @@ Severity mapping: critical >=0.80, high >=0.65, medium >= threshold(0.521919), l
 ## Feature gaps vs UI spec
 - No history/stats/KPI/chart endpoints, no detections list, no technique mapping, no feature importance, no PDF/report generation, no CSV upload endpoint. These UI needs have no backend source → SAMPLE/derived via adapters; feature-map.md tracks.
 - `POST /api/v1/detect` (and batch) are stateless scoring calls — safe to call from UI adapters and smoke tests.
+
+## Update 2026-10-09 (supersedes the P-1 endpoint claims above)
+- The backend now exposes 8 routes — the P-1 "only health + detect" finding is obsolete. Added since:
+  `GET /api/v1/rag/status`, `POST /api/v1/rag/query` (FAISS MITRE ATT&CK, 697 docs), `POST /api/v1/explain`
+  (validated, grounded LLM via `openai`/`mock`), `POST /api/v1/reports/generate` and
+  `GET /api/v1/reports/{id}/download` (server-side PDFs). Authoritative contract: root `API_CONTRACT.md`.
+- Error codes now also include `RAG_UNAVAILABLE` (503), `LLM_UNAVAILABLE` (503), `LLM_PROVIDER_ERROR` (502),
+  `LLM_TIMEOUT` (504), `LLM_VALIDATION_ERROR` (502), `REPORT_ERROR` (500), `REPORT_NOT_FOUND` (404).
+- Still no detection-history persistence (no database, no listing endpoint) — dashboard/analytics history is
+  the browser session store (`src/lib/session-store.ts`). Technique mapping and feature importance remain
+  unavailable by design (candidates only / not fabricated).

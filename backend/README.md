@@ -1,12 +1,15 @@
 # Backend API
 
-The backend serves the frozen E2 (`with_port`) CICIDS2017 Isolation Forest model through FastAPI. It accepts one network flow or a batch of flows, validates the request, reproduces the validated per-flow preprocessing, returns an anomaly score and decision, and adds the current placeholder severity classification.
+The backend serves the frozen E2 (`with_port`) CICIDS2017 Isolation Forest model through FastAPI, plus MITRE
+ATT&CK RAG retrieval, grounded LLM explanations, and server-side PDF incident reports. It accepts one network
+flow or a batch of flows, validates the request, reproduces the validated per-flow preprocessing, returns an
+anomaly score and decision, and adds severity classification with retrieved/explanatory context.
 
 ```text
 Network Flow
      |
      v
-FastAPI
+FastAPI /api/v1
      |
 Pydantic Validation
      |
@@ -14,12 +17,13 @@ Frozen E2 Isolation Forest
      |
 Anomaly Score
      |
-Severity
+Severity (+ MITRE RAG / LLM explanation on their own surfaces)
      |
-Structured API Response
+Structured API Response / PDF Report
 ```
 
-MITRE ATT&CK mapping, RAG retrieval, LLM explanations, React integration, and live traffic detection are extension points only. The current MITRE, RAG, and LLM services are no-op stubs and do not change the ML decision.
+The backend keeps no server-side detection-history persistence (no database, no record-listing endpoint).
+Full route/schema details live in `API_CONTRACT.md`; service boundaries in `ARCHITECTURE.md`.
 
 ## Model Boundary
 
@@ -40,18 +44,24 @@ scores = -model.score_samples(X.values)
 is_anomaly = scores >= threshold
 ```
 
-The model and preprocessing artifacts are frozen. The API does not retrain, tune, mutate thresholds, or run dataset-level preprocessing.
+The model and preprocessing artifacts are frozen. The API does not retrain, tune, mutate thresholds, run
+dataset-level preprocessing, or persist detection history.
 
 ## Setup
 
-From the repository root:
+From the repository root (Windows PowerShell):
 
 ```powershell
-cd backend
+cd demo\backend
 python -m pip install -r requirements.txt
 ```
 
-Copy `.env.example` to `.env` when local overrides are needed. Settings are loaded from environment variables and the optional `.env` file.
+Note: `requirements.txt` constrains `httpx>=0.27.0,<0.28` because Starlette 0.36's `TestClient` passes the
+`app=` shortcut to `httpx.Client`, which httpx 0.28 removed. The app itself only uses `httpx.Client`,
+`TimeoutException`, and `HTTPError`, so the pin changes no runtime behavior.
+
+Copy `.env.example` to `.env` when local overrides are needed. Settings are loaded from environment variables
+and the optional `.env` file.
 
 Supported settings include:
 
@@ -64,22 +74,42 @@ Supported settings include:
 | `PREPROCESSING_CONFIG_PATH` | Frozen preprocessing config path | `../data/processed/experiments/with_port/preprocessing_config.json` |
 | `ACTIVE_OPERATING_POINT` | Frozen threshold policy, `OP-A` or `OP-B` | `OP-A` |
 | `ALLOWED_ORIGINS` | Comma-separated CORS origins | `http://localhost:3000,http://localhost:5173` |
-| `MITRE_ENABLED` | Enable future MITRE stub | `false` |
-| `RAG_ENABLED` | Enable future RAG stub | `false` |
-| `LLM_ENABLED` | Enable future LLM stub | `false` |
+| `MITRE_ENABLED` | Technique IDs inside `/detect` responses | `false` |
+| `RAG_ENABLED` | Retrieval context inside `/detect` and `/explain` | `false` |
+| `LLM_ENABLED` | `/explain` availability | `false` |
+| `MITRE_DATA_DIR` | MITRE knowledge-base directory | `../data/mitre` |
+| `RAG_EMBEDDING_MODEL` | Sentence-transformers model for the FAISS index | `sentence-transformers/all-MiniLM-L6-v2` |
+| `RAG_TOP_K` | Default retrieval depth | `5` |
+| `LLM_PROVIDER` | `openai` (OpenAI-compatible) or `mock` (offline, deterministic) | `openai` |
+| `LLM_MODEL` | Chat-completions model name | `gpt-4o-mini` |
+| `LLM_API_KEY` | Provider key — inject via environment, never hard-code | _(empty)_ |
+| `LLM_TEMPERATURE` | Generation temperature | `0.2` |
+| `LLM_TIMEOUT` | Seconds per LLM call | `60.0` |
+| `LLM_OPENAI_BASE_URL` | Compatible API base URL | `https://api.openai.com/v1` |
+| `REPORTS_DIR` | Controlled PDF output directory (server-side only) | `../data/reports` |
+
+Deterministic local demo (no key, no cost, offline-capable once the index exists):
+
+```powershell
+$env:RAG_ENABLED='true'; $env:LLM_ENABLED='true'; $env:LLM_PROVIDER='mock'
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8001
+```
+
+Mock-provider success validates plumbing and grounding only — never real-LLM quality or availability.
 
 ## Run the Server
 
 ```powershell
-cd backend
-uvicorn app.main:app --reload
+cd demo\backend
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8001
 ```
 
-The default local URLs are:
+Port `8001` matches the frontend Next.js rewrite (`/api/* → http://localhost:8001/api/*`) and the smoke
+scripts. The default local URLs are:
 
-- API base: <http://localhost:8000>
-- Swagger UI: <http://localhost:8000/docs>
-- OpenAPI document: <http://localhost:8000/openapi.json>
+- API base: <http://localhost:8001/api/v1>
+- Swagger UI: <http://localhost:8001/docs>
+- OpenAPI document: <http://localhost:8001/openapi.json>
 
 ## Architecture
 
@@ -93,25 +123,29 @@ flowchart TD
     IF --> S[Anomaly Score and Decision]
     S --> Sev[SeverityService]
     Sev --> R[Structured Detection Response]
-    R -. future .-> Mitre[MITRE ATT&CK]
-    R -. future .-> Rag[RAG]
-    R -. future .-> LLM[LLM]
-    React[React Frontend - future] --> API
+    D --> Mitre[MITRE ATT&CK retrieval - gated by MITRE_ENABLED]
+    D --> Rag[RAG FAISS retrieval - gated by RAG_ENABLED]
+    API --> Exp[Explain endpoint - LLM, validated + grounded]
+    API --> Rep[Reports endpoint - server-side PDF]
+    Web[Next.js Frontend - /api rewrite + session store] --> API
 ```
 
 Responsibilities remain separate:
 
 - ML: detection and anomaly scoring
-- Severity: risk classification
-- MITRE: future attack context
-- RAG: future knowledge retrieval
-- LLM: future explanation
+- Severity: risk classification (placeholder calibration)
+- MITRE: retrieval-based technique IDs (candidates only)
+- RAG: grounded knowledge retrieval (FAISS)
+- LLM: structured explanations exclusively via `/explain`
+- Reports: server-side PDF generation and UUID-scoped download
 
-The application loads `MLService` once during FastAPI lifespan startup. Health reports whether the model and preprocessing contract are ready.
+The application loads `MLService` once during FastAPI lifespan startup and preloads the RAG index
+best-effort. Health reports model readiness and RAG index state.
 
 ## Preprocessing
 
-API inference operates on one raw flow at a time and uses the authoritative E2 `preprocessing_config.json` plus model metadata:
+API inference operates on one raw flow at a time and uses the authoritative E2 `preprocessing_config.json`
+plus model metadata:
 
 ```text
 Raw feature values
@@ -132,9 +166,13 @@ Exact feature ordering
 Isolation Forest
 ```
 
-For a zero-duration flow, the backend adds `Is_Zero_Duration`, clips duration to `1` microsecond, and recomputes `Flow Packets/s` and `Flow Bytes/s` before applying transformations.
+For a zero-duration flow, the backend adds `Is_Zero_Duration`, clips duration to `1` microsecond, and
+recomputes `Flow Packets/s` and `Flow Bytes/s` before applying transformations.
 
-The feature names, order, and transformation lists are loaded from `preprocessing_config.json` and validated against the model metadata before the service becomes ready. The full dataset pipeline is not executed at request time: loading raw datasets, label repair, conflict removal, deduplication, source-day splitting, and training are outside the API.
+The feature names, order, and transformation lists are loaded from `preprocessing_config.json` and validated
+against the model metadata before the service becomes ready. The full dataset pipeline is not executed at
+request time: loading raw datasets, label repair, conflict removal, deduplication, source-day splitting,
+and training are outside the API.
 
 ## Operating Points
 
@@ -145,7 +183,8 @@ Both E2 operating points are frozen policy values:
 | `OP-A` | `0.5219193851693676` |
 | `OP-B` | `0.4878500998020172` |
 
-`ACTIVE_OPERATING_POINT=OP-A` is the default. Selecting `OP-B` is a configuration choice; the API has no threshold mutation or tuning endpoint.
+`ACTIVE_OPERATING_POINT=OP-A` is the default. Selecting `OP-B` is a configuration choice; the API has no
+threshold mutation or tuning endpoint.
 
 ## Severity
 
@@ -163,25 +202,17 @@ This service can later be replaced with a calibrated risk model without changing
 
 ### `GET /api/v1/health`
 
-Reports application and model readiness. A ready response has this shape:
+Reports application and model readiness plus RAG state. See `API_CONTRACT.md` for the exact schema.
 
-```json
-{
-  "status": "healthy",
-  "model_status": "ready",
-  "model_version": "isolation_forest_v1",
-  "experiment_id": "with_port",
-  "active_operating_point": "OP-A",
-  "active_threshold": 0.521919,
-  "timestamp": "2026-09-15T12:00:00+00:00"
-}
-```
-
-When startup artifact loading fails, the application remains available for health reporting with `status: "degraded"` and `model_status: "not_loaded"`.
+When startup artifact loading fails, the application remains available for health reporting with
+`status: "degraded"` and `model_status: "not_loaded"`.
 
 ### `POST /api/v1/detect`
 
-Scores one network flow. The JSON request uses the CICIDS-style feature aliases defined by the Pydantic schema, such as `Destination Port`, `Flow Duration`, `Flow Bytes/s`, and `Is_Zero_Duration`. The request must contain the 60-feature E2 contract except that `Is_Zero_Duration` is computed by the backend and may be omitted. Values must be finite numbers and unknown fields are rejected.
+Scores one network flow. The JSON request uses the CICIDS-style feature aliases defined by the Pydantic
+schema, such as `Destination Port`, `Flow Duration`, `Flow Bytes/s`, and `Is_Zero_Duration`. The request must
+contain the 60-feature E2 contract except that `Is_Zero_Duration` is computed by the backend and may be
+omitted. Values must be finite numbers and unknown fields are rejected.
 
 Processing is:
 
@@ -191,148 +222,67 @@ Processing is:
 4. Compute `-model.score_samples()`.
 5. Compare the score with the active frozen threshold.
 6. Classify placeholder severity.
-7. Return detection, context, explanation, and metadata fields.
+7. Attach MITRE/RAG context only when enabled (empty otherwise — detection never blocks on them).
+8. Return detection, context, explanation stub, and metadata fields.
 
-Representative response:
-
-```json
-{
-  "request_id": "request-123",
-  "detection": {
-    "is_anomaly": true,
-    "anomaly_score": 0.612345,
-    "threshold": 0.521919,
-    "experiment_id": "with_port",
-    "operating_point": "OP-A"
-  },
-  "severity": {
-    "level": "medium",
-    "risk_score": 0.612345,
-    "calibration_note": "INITIAL PLACEHOLDER CALIBRATION"
-  },
-  "attack_context": {
-    "mitre_techniques": [],
-    "retrieved_context": []
-  },
-  "explanation": {
-    "summary": null,
-    "reasoning": null,
-    "recommendations": []
-  },
-  "metadata": {
-    "model_version": "isolation_forest_v1",
-    "source_dataset": "CICIDS2017",
-    "timestamp": "2026-09-15T12:00:00+00:00"
-  }
-}
-```
-
-Per-feature attribution (`detected_features`) is not currently available and is not fabricated in this response schema.
+Per-feature attribution (`detected_features`) is not currently available and is not fabricated in responses.
 
 ### `POST /api/v1/detect/batch`
 
-Accepts:
+Accepts `{ "flows": [...] }` where each flow satisfies the complete request schema. Results preserve input
+order. An empty `flows` list returns `count: 0` and an empty `results` list. Any invalid flow causes request
+validation to fail rather than silently imputing values.
 
-```json
-{
-  "flows": [
-    { "Destination Port": 80, "Flow Duration": 10 }
-  ]
-}
-```
+### `GET /api/v1/rag/status` and `POST /api/v1/rag/query`
 
-The example is abbreviated; each flow must satisfy the complete request schema. Results preserve input order and are returned as:
+Index status and grounded MITRE ATT&CK search (`query` 1–2000 chars, `top_k` 1–50). Missing index → controlled
+`503 RAG_UNAVAILABLE`. All hits are retrieval candidates, never confirmed detections.
 
-```json
-{
-  "batch_id": "batch-123",
-  "count": 1,
-  "results": [
-    { "request_id": "batch-123-0", "detection": {}, "severity": {}, "attack_context": {}, "explanation": {}, "metadata": {} }
-  ],
-  "timestamp": "2026-09-15T12:00:00+00:00"
-}
-```
+### `POST /api/v1/explain`
 
-An empty `flows` list returns `count: 0` and an empty `results` list. Any invalid flow causes request validation to fail rather than silently imputing values.
+Re-runs ML → severity → RAG on the supplied flow, then returns a schema-validated, technique-grounded LLM
+explanation (IDs restricted to retrieved candidates). Disabled/misconfigured LLM → controlled
+`503 LLM_UNAVAILABLE`. Mock provider (`LLM_PROVIDER=mock`) is deterministic and offline.
+
+### `POST /api/v1/reports/generate` and `GET /api/v1/reports/{report_id}/download`
+
+Server-side PDF generation (detection + indicators + retrieved context + optional re-validated LLM
+explanation) and UUID-scoped download (`application/pdf`). Bad IDs → controlled `404 REPORT_NOT_FOUND`.
 
 ## Errors
 
-API errors use the existing `ErrorResponse` schema:
+API errors use the `ErrorResponse` schema (`error_code`, `message`, `details`, `timestamp`, `request_id`).
+Supported codes and HTTP mapping:
 
-```json
-{
-  "error_code": "INFERENCE_ERROR",
-  "message": "An error occurred during anomaly inference",
-  "details": {},
-  "timestamp": "2026-09-15T12:00:00+00:00",
-  "request_id": "request-123"
-}
+- `INVALID_INPUT` (422), `FEATURE_MISMATCH` (422), `MODEL_NOT_READY` (503)
+- `INFERENCE_ERROR` (500), `INTERNAL_ERROR` (500)
+- `RAG_UNAVAILABLE` (503), `LLM_UNAVAILABLE` (503), `LLM_PROVIDER_ERROR` (502), `LLM_TIMEOUT` (504),
+  `LLM_VALIDATION_ERROR` (502)
+- `REPORT_ERROR` (500), `REPORT_NOT_FOUND` (404)
+
+Internal inference exception details are logged but are not exposed through the API.
+
+## Tests
+
+```powershell
+cd demo\backend
+python -m pytest tests -q        # full suite: 132 passed (87 unit + 45 integration)
+python -m pytest tests/unit -q   # 87 passed
+python -m pytest tests/integration -q  # 45 passed
 ```
 
-Supported application error codes are:
-
-- `INVALID_INPUT`: request validation failed, including missing, non-numeric, NaN, Infinity, or extra fields.
-- `FEATURE_MISMATCH`: feature contract or preprocessing configuration mismatch.
-- `MODEL_NOT_READY`: model or preprocessing artifact is unavailable or invalid.
-- `INFERENCE_ERROR`: model preprocessing or scoring failed.
-- `INTERNAL_ERROR`: unexpected server failure.
-
-Validation and feature errors use HTTP 422, model readiness errors use HTTP 503, and inference/internal errors use HTTP 500. Internal inference exception details are logged but are not exposed through the API.
+Fixtures live in `tests/fixtures/sample_flows.json` (benign 0.451762/info, anomalous 0.540229/medium,
+zero-duration 0.458718/info at OP-A).
 
 ## Current Backend Tree
 
-```text
-backend/
-├── .env.example
-├── requirements.txt
-├── README.md
-├── app/
-│   ├── __init__.py
-│   ├── main.py
-│   ├── dependencies.py
-│   ├── api/
-│   │   ├── __init__.py
-│   │   └── v1/
-│   │       ├── __init__.py
-│   │       ├── router.py
-│   │       ├── health.py
-│   │       └── detection.py
-│   ├── core/
-│   │   ├── __init__.py
-│   │   ├── config.py
-│   │   ├── exceptions.py
-│   │   └── logging.py
-│   ├── schemas/
-│   │   ├── __init__.py
-│   │   ├── common.py
-│   │   ├── detection.py
-│   │   └── health.py
-│   └── services/
-│       ├── __init__.py
-│       ├── ml_service.py
-│       ├── detection_service.py
-│       ├── severity_service.py
-│       ├── mitre_service.py
-│       ├── rag_service.py
-│       └── llm_service.py
-└── tests/
-    ├── __init__.py
-    ├── conftest.py
-    ├── fixtures/
-    ├── unit/
-    └── integration/
-```
-
-The listed MITRE, RAG, and LLM files are implemented extension stubs only. A React frontend and live detection source are future work.
+See `ARCHITECTURE.md` for the authoritative module tree (API routes, schemas, and all services including RAG,
+LLM, evidence, and report modules).
 
 ## Verification
 
-On 2026-09-15:
+On 2026-10-09:
 
-- Backend tests: 39 passed, 0 failed.
-- Frozen consistency fixtures: maximum score difference `0.0`; threshold match `True`; prediction match `True`.
-- `GET /api/v1/health`: PASS.
-- `POST /api/v1/detect`: PASS.
-- `POST /api/v1/detect/batch`: PASS.
-- `/docs` and `/openapi.json`: PASS.
+- Backend tests: 132 passed, 0 failed.
+- Live-HTTP checks: health, single/batch/empty-batch/invalid-input detection, RAG status/query,
+  mock explanation grounding, report generation plus `%PDF-` download, and controlled 404s: PASS.

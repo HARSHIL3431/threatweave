@@ -1,8 +1,8 @@
 # MEMORY.md — Project Memory (Authoritative)
 
-**Current phase**: PHASE 4 — Backend ML Serving Foundation
-**Status**: Backend serving foundation, hardening, and documentation complete (2026-09-15)
-**Next phase**: Frontend
+**Current phase**: PHASE 6 + follow-ups — E2E verification, session analytics, docs sync (2026-10-09)
+**Status**: Full pipeline verified live (PASS WITH LIMITATIONS): frozen E2 detection, RAG, mock-LLM explanation, backend PDFs, Next.js integration; backend suite 132/132; see `THREATWEAVE_PHASE6_FINAL_AUDIT.md`
+**Next phase**: Real-provider LLM evaluation (approved key required) and optional server-side history persistence (new contract, approval required)
 
 ---
 
