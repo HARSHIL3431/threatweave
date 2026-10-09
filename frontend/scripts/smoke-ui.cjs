@@ -2,7 +2,7 @@ const { chromium } = require("playwright-core");
 
 const BASE = process.env.UI_BASE || "http://localhost:3000";
 const routes = ["/", "/dashboard", "/detections/d1", "/analytics", "/mitre", "/reports", "/explorer", "/settings", "/dev/components"];
-const expectText = { "/": "Detection Engine Operational", "/dashboard": "Anomaly Activity", "/detections/d1": "Detection Details", "/analytics": "Incident Report" };
+const expectText = { "/": "Detection Engine Operational", "/dashboard": "Session Scores", "/detections/d1": "Detection Details", "/analytics": "Incident Report" };
 
 (async () => {
   const b = await chromium.launch();
