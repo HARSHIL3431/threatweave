@@ -3,6 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { MOCK_DETECTIONS } from "@/lib/data/detections";
+import { findSessionDetection } from "@/lib/session-store";
 import { downloadIncidentReport } from "@/lib/report";
 import { Gauge } from "@/components/charts/charts";
 import { TechniqueChip } from "@/components/ui/technique-chip";
@@ -14,7 +15,97 @@ export default function DetectionDetails() {
   const params = useParams();
   const router = useRouter();
   const id = String(params.id);
-  const idx = Math.max(0, MOCK_DETECTIONS.findIndex((d) => d.id === id));
+  const sessionRecord = findSessionDetection(id);
+  const fixtureIdx = MOCK_DETECTIONS.findIndex((d) => d.id === id);
+
+  if (!sessionRecord && fixtureIdx === -1) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          <Link href="/dashboard" aria-label="Back" className="grid h-10 w-10 place-items-center rounded-[10px] border" style={{ borderColor: "var(--border)", color: "var(--text)" }}>
+            <ArrowLeft size={17} />
+          </Link>
+          <div>
+            <h1 className="text-[28px] font-bold" style={{ color: "var(--text)" }}>Record not found</h1>
+            <p className="text-sm" style={{ color: "var(--text-muted)" }}>
+              No detection with identifier <span className="font-mono">{id}</span> exists here. The backend keeps no
+              persisted history, so only fixture records (<span className="font-mono">d1–d5</span>) and responses
+              recorded in this browser session can be viewed.
+            </p>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => router.push("/dashboard")}>Dashboard</Button>
+          <Button onClick={() => router.push("/reports")}>Run a live analysis</Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (sessionRecord) {
+    const r = sessionRecord;
+    const ctx = r.attack_context.retrieved_context as string[];
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          <Link href="/dashboard" aria-label="Back" className="grid h-10 w-10 place-items-center rounded-[10px] border" style={{ borderColor: "var(--border)", color: "var(--text)" }}>
+            <ArrowLeft size={17} />
+          </Link>
+          <div>
+            <h1 className="text-[28px] font-bold" style={{ color: "var(--text)" }}>Detection Details</h1>
+            <p className="text-sm" style={{ color: "var(--text-muted)" }}>
+              <span className="rounded px-1.5 py-0.5 text-[10px] font-bold" style={{ background: "var(--green)", color: "#fff" }}>LIVE</span>{" "}
+              Real backend response recorded in this browser session. Request <span className="font-mono">{r.request_id}</span>
+            </p>
+          </div>
+        </div>
+        <div className="grid gap-4 xl:grid-cols-[2fr_1fr_1fr]">
+          <div className="rounded-2xl border p-5" style={{ background: "var(--surface)", borderColor: "var(--border)" }}>
+            <div className="font-bold" style={{ color: r.detection.is_anomaly ? "var(--brand)" : "var(--text)" }}>
+              {r.detection.is_anomaly ? "Anomaly Detected" : "No Anomaly"}
+            </div>
+            <p className="mt-3 text-sm" style={{ color: "var(--text-muted)" }}>
+              Scored by the frozen E2 Isolation Forest ({r.detection.experiment_id} / {r.detection.operating_point}).
+              A statistical anomaly is a candidate for review, not proof of malicious activity.
+            </p>
+            <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
+              {Object.entries({
+                "Anomaly Score": r.detection.anomaly_score.toFixed(6),
+                Threshold: r.detection.threshold.toFixed(6),
+                Severity: r.severity.level,
+                Model: r.metadata.model_version,
+                Timestamp: r.metadata.timestamp,
+                Calibration: r.severity.calibration_note,
+              }).map(([k, v]) => (
+                <div key={k}>
+                  <div style={{ color: "var(--text-subtle)" }}>{k}</div>
+                  <div className="font-mono font-semibold break-all" style={{ color: "var(--text)" }}>{v}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="flex flex-col items-center justify-center rounded-2xl border p-5 text-center" style={{ background: "var(--surface)", borderColor: "var(--border)" }}>
+            <Gauge value={r.detection.anomaly_score} />
+          </div>
+          <div className="rounded-2xl border p-5" style={{ background: "var(--surface)", borderColor: "var(--border)" }}>
+            <h3 className="font-bold" style={{ color: "var(--text)" }}>Retrieved Context</h3>
+            {ctx.length > 0 ? (
+              <ul className="mt-3 list-disc space-y-1 pl-5 font-mono text-[11px]" style={{ color: "var(--text-muted)" }}>
+                {ctx.map((c) => <li key={c}>{c}</li>)}
+              </ul>
+            ) : (
+              <p className="mt-3 text-xs" style={{ color: "var(--text-muted)" }}>No ATT&amp;CK context was retrieved for this response (RAG disabled or no candidates).</p>
+            )}
+            <div className="mt-4">
+              <Button onClick={() => router.push("/reports")}>Open full analysis</Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const idx = fixtureIdx;
   const d = MOCK_DETECTIONS[idx] ?? MOCK_DETECTIONS[0];
   const prev = MOCK_DETECTIONS[(idx - 1 + MOCK_DETECTIONS.length) % MOCK_DETECTIONS.length];
   const next = MOCK_DETECTIONS[(idx + 1) % MOCK_DETECTIONS.length];
@@ -46,6 +137,11 @@ export default function DetectionDetails() {
           <Button variant="outline" onClick={() => router.push(`/detections/${next.id}`)}>Next <ChevronRight size={15} /></Button>
           <Button onClick={exportPdf}><Download size={15} /> Export Report (PDF)</Button>
         </div>
+      </div>
+      <div className="rounded-2xl border p-4 text-sm" style={{ background: "var(--surface)", borderColor: "var(--border)", color: "var(--text-muted)" }}>
+        <span className="rounded px-1.5 py-0.5 text-[10px] font-bold" style={{ background: "var(--brand-soft)", color: "var(--brand)" }}>SAMPLE</span>{" "}
+        This record is mock data for UI preview, not backend output.{" "}
+        <Link href="/reports" className="font-semibold" style={{ color: "var(--brand)" }}>Run a live analysis →</Link>
       </div>
       <div className="grid gap-4 xl:grid-cols-[2fr_1fr_1fr_1fr]">
         <div className="rounded-2xl border p-5" style={{ background: "var(--surface)", borderColor: "var(--border)" }}>
