@@ -42,6 +42,18 @@ export type RagStatusResponse = {
   technique_count?: number | null;
   subtechnique_count?: number | null;
   detail?: string | null;
+  // P0-1 provenance (absent for indexes built before provenance tracking).
+  // built_at is the index *build* time, never the ATT&CK release time.
+  source_url?: string | null;
+  bundle_sha256?: string | null;
+  bundle_bytes?: number | null;
+  attack_pattern_count?: number | null;
+  attack_version?: string | null;
+  max_modified?: string | null;
+  built_at?: string | null;
+  knowledge_age_days?: number | null;
+  knowledge_age_status?: string | null;
+  is_stale?: boolean;
   timestamp: string;
 };
 

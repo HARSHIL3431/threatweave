@@ -33,6 +33,10 @@ class LLMEvidence(BaseModel):
     risk_score: float
     flow_summary: Dict[str, Any] = Field(default_factory=dict)
     rag_results: List[EvidenceTechnique] = Field(default_factory=list)
+    # Optional note about the retrieval index itself (availability, build age,
+    # staleness). Shown to the model as index metadata, never as technique
+    # evidence. Empty when unknown/unneeded; additive and backward compatible.
+    rag_provenance_note: str = ""
 
 
 class PotentialAttackContext(BaseModel):

@@ -47,6 +47,20 @@ class RagStatusResponse(BaseModel):
     technique_count: Optional[int] = None
     subtechnique_count: Optional[int] = None
     detail: Optional[str] = None
+    # P0-1 provenance (all optional: older artifacts lack them).
+    # built_at is the index *build* time, never the ATT&CK release time.
+    source_url: Optional[str] = None
+    bundle_sha256: Optional[str] = None
+    bundle_bytes: Optional[int] = None
+    attack_pattern_count: Optional[int] = None
+    attack_version: Optional[str] = None
+    max_modified: Optional[str] = None
+    built_at: Optional[str] = None
+    knowledge_age_days: Optional[int] = None
+    knowledge_age_status: Optional[str] = Field(
+        default=None, description="'fresh', 'stale', or 'unknown'"
+    )
+    is_stale: bool = False
     timestamp: str = Field(
         default_factory=lambda: datetime.now(timezone.utc).isoformat(),
         description="ISO-8601 UTC timestamp",

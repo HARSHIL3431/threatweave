@@ -18,7 +18,7 @@ from app.schemas.llm import (
     LLMMetadata,
 )
 from app.services.analysis_evidence import build_analysis_evidence
-from app.services.llm_prompts import summarize_flow
+from app.services.llm_prompts import format_provenance_note, summarize_flow
 from app.services.llm_service import LLMService
 from app.services.ml_service import MLService
 from app.services.rag_service import RagService, format_retrieval_result
@@ -26,6 +26,14 @@ from app.services.rag_service import RagService, format_retrieval_result
 logger = get_logger("explain_api")
 
 router = APIRouter(tags=["LLM"])
+
+
+def _safe_provenance_note(rag_service: RagService) -> str:
+    """Build the index-freshness note without ever failing the request."""
+    try:
+        return format_provenance_note(rag_service.status())
+    except Exception:
+        return ""
 
 
 @router.post(
@@ -78,6 +86,9 @@ def explain_flow(
             )
             for r in packet.retrieved
         ],
+        # Index-freshness note for the prompt; status() is read-only
+        # (no embed, no download). Never blocks explanation on failure.
+        rag_provenance_note=_safe_provenance_note(rag_service),
     )
 
     explanation, latency_ms = llm_service.generate_explanation(evidence)

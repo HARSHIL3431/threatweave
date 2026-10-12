@@ -64,6 +64,7 @@ def main() -> None:
         build_documents,
         parse_stix_bundle,
     )
+    from app.services.mitre_provenance import compute_provenance
     from app.services.vector_store import VectorStore
 
     print("MITRE ATT&CK ingestion started")
@@ -78,8 +79,19 @@ def main() -> None:
         )
 
     print(f"Parsing STIX bundle: {raw_file}")
-    with open(raw_file, "r", encoding="utf-8") as f:
-        bundle = json.load(f)
+    # P0-1: hash and measure the exact bytes that are parsed so the
+    # provenance record verifiably describes this build's source.
+    raw_bytes = raw_file.read_bytes()
+    bundle = json.loads(raw_bytes.decode("utf-8"))
+    if args.raw is None:
+        source_url = settings.MITRE_ENTERPRISE_STIX_URL
+    else:
+        source_url = f"local:{Path(args.raw).name}"
+    provenance = compute_provenance(
+        source_url=source_url,
+        bundle_bytes=raw_bytes,
+        bundle=bundle,
+    )
     try:
         techniques = parse_stix_bundle(bundle)
     except MitreDataError as e:
@@ -148,10 +160,17 @@ def main() -> None:
         embedding_model=model_name,
         technique_count=active_techniques,
         subtechnique_count=active_subtechniques,
+        provenance=provenance,
     )
     store.save()
 
     print(f"Embedding dimension: {vectors.shape[1]}")
+    print(f"Source: {provenance['source_url']}")
+    print(f"Bundle SHA-256: {provenance['bundle_sha256']}")
+    print(f"Attack patterns parsed: {provenance['attack_pattern_count']}")
+    print(f"Latest technique modified: {provenance['max_modified']}")
+    print("ATT&CK release version: unknown (not established by bundle metadata)")
+
     print("FAISS index created")
     print(f"Index saved: {settings.mitre_index_file}")
     print(f"Metadata saved: {settings.mitre_index_metadata_file}")

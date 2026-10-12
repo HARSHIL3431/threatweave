@@ -11,6 +11,7 @@ returns a controlled 503 RAG_UNAVAILABLE error.
 """
 import time
 from dataclasses import dataclass, field
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -18,7 +19,26 @@ from app.core.config import settings
 from app.core.exceptions import RagUnavailableException
 from app.core.logging import get_logger
 from app.services.embedding_service import EmbeddingService
-from app.services.vector_store import VectorStore
+from app.services.mitre_provenance import knowledge_age
+from app.services.observability import (
+    CATEGORY_EMBEDDING,
+    CATEGORY_INTEGRITY,
+    CATEGORY_INVALID_QUERY,
+    CATEGORY_OK,
+    CATEGORY_UNAVAILABLE,
+    CATEGORY_UNEXPECTED,
+    RAG_INTEGRITY_FAILED,
+    RAG_PROVENANCE_STALE,
+    RAG_PROVENANCE_UNKNOWN,
+    RAG_QUERY_ATTEMPTED,
+    RAG_QUERY_COMPLETED,
+    RAG_QUERY_FAILED,
+    RAG_RETRIEVAL_EMPTY,
+    RAG_UNAVAILABLE_OBSERVED,
+    record_event,
+    record_latency,
+)
+from app.services.vector_store import VectorStore, VectorStoreIntegrityError
 
 logger = get_logger("rag_service")
 
@@ -136,9 +156,11 @@ class RagService:
 
         if not self.index_path.exists():
             self._load_error = f"FAISS index not found at {self.index_path}"
+            record_event(RAG_UNAVAILABLE_OBSERVED, CATEGORY_UNAVAILABLE)
             return None
         if not self.metadata_path.exists():
             self._load_error = f"Index metadata not found at {self.metadata_path}"
+            record_event(RAG_UNAVAILABLE_OBSERVED, CATEGORY_UNAVAILABLE)
             return None
 
         try:
@@ -151,6 +173,13 @@ class RagService:
                 f"dim={store.dimension}"
             )
             return store
+        except VectorStoreIntegrityError as e:
+            # Fail closed with the invariant that failed; the API surface
+            # still reports controlled RAG_UNAVAILABLE (never ready).
+            self._load_error = f"RAG vector store failed integrity checks: {e}"
+            logger.error(self._load_error)
+            record_event(RAG_INTEGRITY_FAILED, CATEGORY_INTEGRITY)
+            return None
         except Exception as e:
             self._load_error = f"Failed to load RAG vector store: {str(e)}"
             logger.error(self._load_error)
@@ -170,15 +199,31 @@ class RagService:
         """Retrieve the most relevant MITRE ATT&CK techniques for a query."""
         store = self._load_store()
         if store is None:
+            record_event(RAG_QUERY_FAILED, CATEGORY_UNAVAILABLE)
             raise RagUnavailableException(
                 self._load_error or "RAG knowledge index is unavailable"
             )
         if not query or not query.strip():
+            record_event(RAG_QUERY_FAILED, CATEGORY_INVALID_QUERY)
             raise ValueError("Query must be a non-empty string")
 
         k = self.top_k if top_k is None else max(1, int(top_k))
-        query_vector = self.embedder.embed([query])[0]
-        hits = store.search(query_vector, top_k=k)
+        record_event(RAG_QUERY_ATTEMPTED, CATEGORY_OK)
+        started = time.perf_counter()
+        try:
+            query_vector = self.embedder.embed([query])[0]
+        except Exception:
+            record_event(RAG_QUERY_FAILED, CATEGORY_EMBEDDING)
+            raise
+        try:
+            hits = store.search(query_vector, top_k=k)
+        except Exception:
+            record_event(RAG_QUERY_FAILED, CATEGORY_UNEXPECTED)
+            raise
+        record_latency("rag.query", (time.perf_counter() - started) * 1000.0)
+        record_event(RAG_QUERY_COMPLETED, CATEGORY_OK)
+        if not hits:
+            record_event(RAG_RETRIEVAL_EMPTY, CATEGORY_OK)
 
         results = [
             RetrievalResult(
@@ -260,7 +305,15 @@ class RagService:
     # ------------------------------------------------------------------ #
     # Status for health/API
     # ------------------------------------------------------------------ #
-    def status(self) -> Dict[str, Any]:
+    def status(self, now: Optional[datetime] = None) -> Dict[str, Any]:
+        """Describe index readiness plus stored source provenance.
+
+        Read-only: never downloads, rebuilds, or embeds. ``now`` is an
+        injectable clock for deterministic tests; callers omit it.
+        ``built_at`` is the index *build* time, never the ATT&CK release
+        time. Missing/invalid timestamps report age ``unknown`` (never
+        fresh); staleness (>180 days) is only asserted from a valid date.
+        """
         store = self._load_store()
         if store is None:
             return {
@@ -268,7 +321,16 @@ class RagService:
                 "detail": self._load_error
                 or "RAG index not built. Run scripts/build_mitre_index.py first.",
                 "index_path": str(self.index_path),
+                "knowledge_age_days": None,
+                "knowledge_age_status": "unknown",
+                "is_stale": False,
             }
+        provenance = store.provenance if isinstance(store.provenance, dict) else {}
+        age = knowledge_age(provenance.get("built_at"), now=now)
+        if age["age_status"] == "unknown":
+            record_event(RAG_PROVENANCE_UNKNOWN, CATEGORY_OK)
+        elif age["is_stale"]:
+            record_event(RAG_PROVENANCE_STALE, CATEGORY_OK)
         return {
             "status": "ready",
             "index_path": str(store.index_path),
@@ -277,6 +339,16 @@ class RagService:
             "doc_count": len(store.documents),
             "technique_count": store.technique_count,
             "subtechnique_count": store.subtechnique_count,
+            "source_url": provenance.get("source_url"),
+            "bundle_sha256": provenance.get("bundle_sha256"),
+            "bundle_bytes": provenance.get("bundle_bytes"),
+            "attack_pattern_count": provenance.get("attack_pattern_count"),
+            "attack_version": provenance.get("attack_version"),
+            "max_modified": provenance.get("max_modified"),
+            "built_at": provenance.get("built_at"),
+            "knowledge_age_days": age["age_days"],
+            "knowledge_age_status": age["age_status"],
+            "is_stale": age["is_stale"],
         }
 
 

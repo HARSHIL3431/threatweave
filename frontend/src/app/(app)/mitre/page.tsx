@@ -44,12 +44,32 @@ export default function Mitre() {
 
       <div className="rounded-2xl border p-5 text-sm" style={{ background: "var(--surface)", borderColor: "var(--border)", color: "var(--text-muted)" }}>
         {status ? (
-          <p>
-            Index status: <strong style={{ color: "var(--text)" }}>{status.status}</strong>
+          <div>
+            <p>
+              Index status: <strong style={{ color: "var(--text)" }}>{status.status}</strong>
+              {status.status === "ready" && (
+                <span className="text-xs"> · {status.technique_count} techniques / {status.subtechnique_count} sub-techniques · {status.embedding_model}</span>
+              )}
+            </p>
             {status.status === "ready" && (
-              <span className="text-xs"> · {status.technique_count} techniques / {status.subtechnique_count} sub-techniques · {status.embedding_model}</span>
+              <p className="mt-1 text-xs">
+                {status.knowledge_age_status === "unknown" || status.built_at == null ? (
+                  <span>Knowledge age: unknown (index predates provenance tracking; build date unavailable).</span>
+                ) : (
+                  <span>
+                    Index built {status.built_at.slice(0, 10)} ({status.knowledge_age_days} days ago)
+                    {status.is_stale ? (
+                      <strong style={{ color: "var(--brand)" }}> — stale (&gt;180 days old)</strong>
+                    ) : (
+                      <span> — fresh</span>
+                    )}
+                    . Build date is not the ATT&amp;CK release date
+                    {status.attack_version ? ` (release ${status.attack_version})` : " (release unknown)"}.
+                  </span>
+                )}
+              </p>
             )}
-          </p>
+          </div>
         ) : statusErr ? (
           <p><span className="font-mono font-bold">{statusErr instanceof ApiError ? statusErr.code : "ERROR"}</span> — {friendlyError(statusErr)}</p>
         ) : (
