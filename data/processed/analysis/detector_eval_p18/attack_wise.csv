@@ -1,0 +1,29 @@
+split,op,attack,samples,detected,recall
+Validation (Tuesday),OP-A,FTP-Patator,5933,0,0.0
+Validation (Tuesday),OP-B,FTP-Patator,5933,3930,0.6623967638631384
+Validation (Tuesday),OP-A,SSH-Patator,3219,2,0.0006213109661385523
+Validation (Tuesday),OP-B,SSH-Patator,3219,2955,0.9179869524697111
+Wednesday,OP-A,DoS GoldenEye,10286,9625,0.9357378961695508
+Wednesday,OP-B,DoS GoldenEye,10286,10144,0.9861948279214466
+Wednesday,OP-A,DoS Hulk,172719,155915,0.9027090244848569
+Wednesday,OP-B,DoS Hulk,172719,156498,0.9060844493078353
+Wednesday,OP-A,DoS Slowhttptest,5228,4848,0.9273144605967866
+Wednesday,OP-B,DoS Slowhttptest,5228,5034,0.9628921193573068
+Wednesday,OP-A,DoS slowloris,5384,3325,0.6175705794947994
+Wednesday,OP-B,DoS slowloris,5384,5087,0.9448365527488856
+Wednesday,OP-A,Heartbleed,11,11,1.0
+Wednesday,OP-B,Heartbleed,11,11,1.0
+Thursday-Morning,OP-A,Web Attack - Brute Force,1470,76,0.05170068027210884
+Thursday-Morning,OP-B,Web Attack - Brute Force,1470,1286,0.8748299319727891
+Thursday-Morning,OP-A,Web Attack - Sql Injection,21,7,0.3333333333333333
+Thursday-Morning,OP-B,Web Attack - Sql Injection,21,12,0.5714285714285714
+Thursday-Morning,OP-A,Web Attack - XSS,652,21,0.032208588957055216
+Thursday-Morning,OP-B,Web Attack - XSS,652,626,0.9601226993865031
+Thursday-Afternoon,OP-A,Infiltration,36,32,0.8888888888888888
+Thursday-Afternoon,OP-B,Infiltration,36,33,0.9166666666666666
+Friday-Morning,OP-A,Bot,1953,418,0.21402969790066564
+Friday-Morning,OP-B,Bot,1953,562,0.28776241679467485
+Friday-PortScan,OP-A,PortScan,90255,749,0.008298709212785995
+Friday-PortScan,OP-B,PortScan,90255,9194,0.10186693257991247
+Friday-DDoS,OP-A,DDoS,128013,85498,0.6678852928999398
+Friday-DDoS,OP-B,DDoS,128013,109264,0.8535383125151352

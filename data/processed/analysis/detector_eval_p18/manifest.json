@@ -1,0 +1,26 @@
+{
+  "script": "evaluate_detector.py v1 (P1-8)",
+  "generated_at": "2026-10-11T17:13:43Z",
+  "experiment": "with_port",
+  "feature_count": 60,
+  "op_a_threshold": 0.5219193851693676,
+  "op_b_threshold": 0.4878500998020172,
+  "score_semantics": "-score_samples(); higher means more anomalous",
+  "decision_rule": "score >= threshold",
+  "positive_class": "Label != 'BENIGN' after whitespace strip",
+  "dataset_hashes": {
+    "dataset/Monday-WorkingHours.pcap_ISCX.csv": "852c4beb34eda186f32561fa79df7a0747e92e1a6535b01270820dd9ffe17f34",
+    "dataset/Tuesday-WorkingHours.pcap_ISCX.csv": "52b8692ae8c7d2ed04671fe2b98335693c0a92c7ab157d8c8b534d6523080851",
+    "dataset/Wednesday-workingHours.pcap_ISCX.csv": "893c27dc968bf7a8adef1689f90be55ca4a4dc3088fb63d6ff247ac56856df2a",
+    "dataset/Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv": "d67066211fb1689c78406f1506f4c44704ecb92088353d5c96d96d6474eb819d",
+    "dataset/Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv": "6bcda3857c2504676034e3ea57762d38393cc734cb377a726bd5cb153961b1b5",
+    "dataset/Friday-WorkingHours-Morning.pcap_ISCX.csv": "53a41c24d570ea83b7ac55b2e94df94e7a8216aeb80a2af0246b6bc8bb543000",
+    "dataset/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv": "ca1824c51bfbb7b3c72290a11be04366ba8815878c6a1cc5c44cb1cee269e99b",
+    "dataset/Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv": "6ff1580f5f81c0ae28a26f7631721018577f5f7c5e0feac28b795fcfe7b411ee"
+  },
+  "artifact_hashes": {
+    "model.pkl": "559fdb30a1b88a8a8a42ba73bb7437dcd5e52f9b08e3e7ea8a6e09dc7b3600ea",
+    "preprocessing_config.json": "92cc44709c3218a83c8c88503a61dc1eb37ea9c5bac84013530db2d3ce08e813"
+  },
+  "total_excluded_invalid_labels": 0
+}
