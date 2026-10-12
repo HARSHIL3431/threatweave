@@ -1,0 +1,36 @@
+{
+  "version": "llm-guard-track-b-v1",
+  "description": "Track B input manifest: approved, non-sensitive generation inputs for a future authorized capture run. Synthetic CICIDS fixture flows only (backend/tests/fixtures/sample_flows.json) — no real traffic, IPs, PCAPs, or credentials. All human annotations are pending: no Track B measurement exists.",
+  "flow_source": "backend/tests/fixtures/sample_flows.json",
+  "capture_procedure": "Authorized run only: existing opt-in test path (THREATWEAVE_REAL_LLM_TEST=1 with funded key) or POST /api/v1/explain against approved flows; save each raw provider output string as <input_id>.json; redact before persisting; record provider/model identifiers in the run log, never keys.",
+  "inputs": [
+    {
+      "input_id": "TB-01",
+      "flow_ref": "anomalous_flow",
+      "task": "standard-explanation",
+      "approval": "synthetic fixture flow; approved input class per protocol Track B",
+      "human_annotation": null
+    },
+    {
+      "input_id": "TB-02",
+      "flow_ref": "benign_flow",
+      "task": "standard-explanation",
+      "approval": "synthetic fixture flow; approved input class per protocol Track B",
+      "human_annotation": null
+    },
+    {
+      "input_id": "TB-03",
+      "flow_ref": "anomalous_flow",
+      "task": "remediation-focus-review",
+      "approval": "synthetic fixture flow; approved input class per protocol Track B",
+      "human_annotation": null
+    },
+    {
+      "input_id": "TB-04",
+      "flow_ref": "benign_flow",
+      "task": "remediation-focus-review",
+      "approval": "synthetic fixture flow; approved input class per protocol Track B",
+      "human_annotation": null
+    }
+  ]
+}
