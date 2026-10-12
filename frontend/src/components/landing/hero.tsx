@@ -29,9 +29,9 @@ function FloatingCard({ title, subtitle, delay }: { title: string; subtitle: str
 }
 
 const stats = [
-  { icon: <Database size={20} />, color: "var(--blue)", value: "2.83M+", label: "Network Flows Analyzed", caption: "CICIDS2017 Dataset" },
-  { icon: <Settings size={20} />, color: "var(--purple)", value: "60", label: "Detection Features", caption: "Engineered & Validated" },
-  { icon: <Brain size={20} />, color: "var(--brand)", value: "Isolation Forest", label: "Primary Detector", caption: "F1-validated Model (E2)" },
+  { icon: <Database size={20} />, color: "var(--blue)", value: "2.83M+", label: "Dataset Network Flows", caption: "CICIDS2017 Dataset" },
+  { icon: <Settings size={20} />, color: "var(--purple)", value: "60", label: "Detection Features", caption: "Frozen Feature Contract" },
+  { icon: <Brain size={20} />, color: "var(--brand)", value: "Isolation Forest", label: "Primary Detector", caption: "Lab-measured F1 (E2)" },
   { icon: <ShieldCheck size={20} />, color: "var(--green)", value: "MITRE ATT&CK", label: "Intelligence Framework", caption: "Context-Aware Analysis" },
 ];
 

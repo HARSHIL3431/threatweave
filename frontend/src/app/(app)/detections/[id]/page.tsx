@@ -4,7 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { MOCK_DETECTIONS } from "@/lib/data/detections";
 import { findSessionDetection } from "@/lib/session-store";
-import { downloadIncidentReport } from "@/lib/report";
+import { downloadSampleIncidentReport } from "@/lib/report";
 import { Gauge } from "@/components/charts/charts";
 import { TechniqueChip } from "@/components/ui/technique-chip";
 import { ConfidenceBadge } from "@/components/ui/confidence-badge";
@@ -112,7 +112,7 @@ export default function DetectionDetails() {
 
   const exportPdf = async () => {
     try {
-      await downloadIncidentReport(d);
+      await downloadSampleIncidentReport(d);
     } catch {
       window.alert("Failed to generate the PDF report. Please try again.");
     }
@@ -135,7 +135,7 @@ export default function DetectionDetails() {
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => router.push(`/detections/${prev.id}`)}><ChevronLeft size={15} /> Previous</Button>
           <Button variant="outline" onClick={() => router.push(`/detections/${next.id}`)}>Next <ChevronRight size={15} /></Button>
-          <Button onClick={exportPdf}><Download size={15} /> Export Report (PDF)</Button>
+          <Button onClick={exportPdf}><Download size={15} /> Export Sample Report (PDF)</Button>
         </div>
       </div>
       <div className="rounded-2xl border p-4 text-sm" style={{ background: "var(--surface)", borderColor: "var(--border)", color: "var(--text-muted)" }}>
@@ -176,7 +176,7 @@ export default function DetectionDetails() {
           <span className="grid h-10 w-10 place-items-center rounded-xl" style={{ background: "var(--brand-soft)", color: "var(--brand)" }}><Shield size={20} /></span>
           <div className="mt-3 text-2xl font-extrabold" style={{ color: "var(--brand)" }}>{d.severity}</div>
           <div className="text-xs" style={{ color: "var(--text-subtle)" }}>Severity</div>
-          <p className="mt-1 text-xs" style={{ color: "var(--text-muted)" }}>High likelihood of malicious activity</p>
+          <p className="mt-1 text-xs" style={{ color: "var(--text-muted)" }}>Sample severity label for preview — not a model assessment</p>
         </div>
         <div className="rounded-2xl border p-5" style={{ background: "var(--surface)", borderColor: "var(--border)" }}>
           <span className="grid h-10 w-10 place-items-center rounded-xl" style={{ background: "color-mix(in srgb, var(--blue) 12%, transparent)", color: "var(--blue)" }}><Layers size={20} /></span>

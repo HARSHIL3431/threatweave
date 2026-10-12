@@ -42,7 +42,7 @@ const DETAILS = [
   },
   {
     tag: "STEP 04", title: "Anomaly Score",
-    body: "A numeric anomaly score between 0 and 1 is compared against the active frozen operating-point threshold to decide malicious or benign.",
+    body: "An uncalibrated numeric anomaly score (higher means more anomalous) is compared against the active frozen operating-point threshold to decide anomalous or benign — a flag for review, not proof of malice.",
     cards: [
       { icon: <AlertTriangle size={16} />, title: "OP-A Threshold", caption: "0.521919 frozen" },
       { icon: <BarChart3 size={16} />, title: "Score Semantics", caption: "Higher means more anomalous" },
@@ -51,16 +51,16 @@ const DETAILS = [
   },
   {
     tag: "STEP 05", title: "Severity Classification",
-    body: "The score maps to a risk-based severity level from Informational through Critical, with an explicit placeholder calibration note.",
+    body: "The score maps to a score-based severity level from Informational through Critical, with an explicit placeholder calibration note. Bands reflect score magnitude and the frozen threshold — not per-attack reliability, which varies by attack family.",
     cards: [
-      { icon: <Shield size={16} />, title: "Info → Critical", caption: "Risk-based bands" },
+      { icon: <Shield size={16} />, title: "Info → Critical", caption: "Score-based bands" },
       { icon: <AlertTriangle size={16} />, title: "Placeholder Calibration", caption: "Not a validated risk model" },
       { icon: <BarChart3 size={16} />, title: "Thresholds", caption: "0.80 critical, 0.65 high" },
     ],
   },
   {
     tag: "STEP 06", title: "Attack Context",
-    body: "Detected anomalies are positioned for MITRE ATT&CK technique mapping with context-aware explanations and retrieval hooks.",
+    body: "Detected anomalies are positioned for MITRE ATT&CK technique mapping as candidates for analyst review — retrieved techniques are not confirmed attacks — with context-aware explanations and retrieval hooks.",
     cards: [
       { icon: <Search size={16} />, title: "MITRE Mapping", caption: "Technique IDs + names" },
       { icon: <Globe size={16} />, title: "RAG Retrieval", caption: "Context lookup hooks" },

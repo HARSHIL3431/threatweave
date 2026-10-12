@@ -25,6 +25,9 @@ export function MitreAI() {
       <p className="mt-3 max-w-2xl" style={{ color: "var(--text-muted)" }}>
         Automatically map detected anomalies to MITRE ATT&amp;CK techniques and generate AI-powered analyst insights with evidence and recommendations.
       </p>
+      <p className="mt-2 max-w-2xl text-xs" style={{ color: "var(--text-subtle)" }}>
+        Illustrative mock preview — scores, severity, and confidence shown are placeholders, not backend output.
+      </p>
       <div className="mt-10 grid gap-6 lg:grid-cols-4">
         <div className="rounded-2xl border p-5" style={{ background: "var(--surface)", borderColor: "var(--brand)", boxShadow: "var(--active-glow)" }}>
           <span className="rounded-md px-1.5 py-0.5 font-mono text-[11px] font-bold text-white" style={{ background: "var(--brand)" }}>01</span>

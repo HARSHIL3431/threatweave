@@ -29,7 +29,15 @@ const FEATURE_DESCRIPTIONS: Record<string, string> = {
 
 const fmt = (v: unknown) => (v === undefined || v === null || v === "" ? "Not available" : String(v));
 
-export async function downloadIncidentReport(d: Detection) {
+/**
+ * DEMO-ONLY export: renders a clearly-labeled SAMPLE incident report from a
+ * static mock fixture for UI preview. It never touches the backend and must
+ * never be used for live session records — production exports go through
+ * POST /api/v1/reports/generate (see live-workflow.tsx). The PDF itself is
+ * watermarked as sample data so a saved file cannot masquerade as a genuine
+ * security finding.
+ */
+export async function downloadSampleIncidentReport(d: Detection) {
   const { jsPDF } = await import("jspdf");
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const PAGE_W = 210;
@@ -45,7 +53,7 @@ export async function downloadIncidentReport(d: Detection) {
     doc.text("THREATWEAVE", M, 10);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(SLATE_LIGHT);
-    doc.text("Security Incident Report", M + 26, 10);
+    doc.text("Sample Incident Report — Demo Data", M + 26, 10);
     doc.setDrawColor(229, 231, 235);
     doc.setLineWidth(0.2);
     doc.line(M, 12, PAGE_W - M, 12);
@@ -133,7 +141,7 @@ export async function downloadIncidentReport(d: Detection) {
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8.5);
   doc.setTextColor("#9AA6BD");
-  doc.text("Security Incident Report", M, 19);
+  doc.text("Sample Incident Report — Demo Data", M, 19);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10);
   doc.setTextColor("#FFFFFF");
@@ -149,11 +157,19 @@ export async function downloadIncidentReport(d: Detection) {
   badge(d.severity, M, y, SEVERITY_COLORS[d.severity] ?? RED);
   y += 8;
 
+  doc.setFillColor("#FEF3C7");
+  doc.roundedRect(M, y - 1, W, 10, 1.5, 1.5, "F");
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(9.5);
+  doc.setTextColor("#92400E");
+  doc.text("SAMPLE — mock data for UI preview, not a backend finding.", M + 3, y + 5.5);
+  y += 14;
+
   kv("Incident ID", d.id);
   kv("Classification", d.type);
   kv("Detection status", "Model inference — no confirmed compromise");
   kv("Detection timestamp", d.timestamp);
-  kv("Anomaly score", `${d.score.toFixed(2)} (0.00–1.00)`);
+  kv("Anomaly score", `${d.score.toFixed(2)} (uncalibrated; display range)`);
   kv("Severity", d.severity);
   kv("MITRE reference", `${d.mitre.primary.id} — ${d.mitre.primary.name}`);
 
@@ -168,7 +184,7 @@ export async function downloadIncidentReport(d: Detection) {
   bullet(`${d.type} detected on ${d.protocol} traffic from ${fmt(d.srcIp)}:${fmt(d.srcPort)} to ${fmt(d.dstIp)}:${fmt(d.dstPort)}`);
   bullet(`The anomaly detector flagged this flow with a score of ${d.score.toFixed(2)}, above its active alert threshold`);
   bullet(`Classification severity: ${d.severity}`);
-  bullet(`Model-generated MITRE ATT&CK mapping: ${d.mitre.primary.id} ${d.mitre.primary.name} (${d.mitre.primary.confidence} confidence)`);
+  bullet(`Model-generated MITRE ATT&CK mapping: ${d.mitre.primary.id} ${d.mitre.primary.name} (${d.mitre.primary.confidence} similarity-based confidence)`);
 
   section("Endpoints and Transport");
   kv("Source", `${fmt(d.srcIp)}:${fmt(d.srcPort)}`);
@@ -233,11 +249,11 @@ export async function downloadIncidentReport(d: Detection) {
 
   section("MITRE ATT&CK Context");
   kv("Primary technique", `${d.mitre.primary.id} — ${d.mitre.primary.name}`);
-  kv("Confidence", d.mitre.primary.confidence);
+  kv("Confidence (similarity band)", d.mitre.primary.confidence);
   kv("Description", d.mitre.primary.description || "No description supplied.");
   paragraph("The technique mapping above is model-generated inference from the anomaly detector. An anomaly score alone does not prove a confirmed attack or compromise.");
   if (d.mitre.related.length > 0) {
-    kv("Related techniques", d.mitre.related.map((t) => `${t.id} ${t.name} (${t.confidence})`).join("; "));
+    kv("Related techniques", d.mitre.related.map((t) => `${t.id} ${t.name} (${t.confidence} similarity)`).join("; "));
   }
 
   section("AI-Generated Analysis");
@@ -285,10 +301,10 @@ export async function downloadIncidentReport(d: Detection) {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
     doc.setTextColor(SLATE_LIGHT);
-    doc.text("ThreatWeave — Confidential", M, 290);
+    doc.text("ThreatWeave — Sample (demo data, not a finding)", M, 290);
     doc.text(`Generated ${new Date().toISOString().replace("T", " ").slice(0, 19)} UTC`, PAGE_W / 2, 290, { align: "center" });
     doc.text(`Page ${i} of ${total}`, PAGE_W - M, 290, { align: "right" });
   }
 
-  doc.save(`ThreatWeave-Incident-${d.id}.pdf`);
+  doc.save(`ThreatWeave-Sample-${d.id}.pdf`);
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { Area, AreaChart, Cell, Pie, PieChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Line, LineChart, CartesianGrid } from "recharts";
+import { clampGaugeDisplay, formatGaugeValue, isFiniteGaugeValue, isGaugeOutOfRange } from "@/lib/gauge-scale";
 
 export function Sparkline({ data, color = "var(--brand)" }: { data: number[]; color?: string }) {
   const d = data.map((v, i) => ({ i, v }));
@@ -82,19 +83,25 @@ export function TrendChart({ data, yMax }: { data: { t?: string; day?: string; v
 }
 
 export function Gauge({ value }: { value: number }) {
-  const pct = Math.max(0, Math.min(1, value));
+  // The score is uncalibrated and unbounded in principle: the dial shows a
+  // capped 0–1 display range while the numeric readout preserves the value.
+  const valid = isFiniteGaugeValue(value);
+  const display = valid ? value : 0;
+  const pct = clampGaugeDisplay(display);
+  const capped = valid && isGaugeOutOfRange(display);
   const angle = 180 * (1 - pct);
   const r = 80;
   const rad = (a: number) => (a * Math.PI) / 180;
   const x = (a: number) => 100 + r * Math.cos(rad(a));
   const y = (a: number) => 100 - r * Math.sin(rad(a));
   const largeArc = 0;
+  const caption = `Anomaly Score (uncalibrated${capped ? ", dial capped" : ""})`;
   return (
-    <svg viewBox="0 0 200 118" className="w-full" role="img" aria-label={`Anomaly Score ${value.toFixed(2)} out of 1`}>
+    <svg viewBox="0 0 200 118" className="w-full" role="img" aria-label={valid ? `${caption} ${formatGaugeValue(display)}, display range 0 to 1` : "Anomaly Score unavailable"}>
       <path d={`M ${x(180)} ${y(180)} A ${r} ${r} 0 0 1 ${x(0)} ${y(0)}`} fill="none" stroke="var(--border)" strokeWidth="12" strokeLinecap="round" />
       <path d={`M ${x(180)} ${y(180)} A ${r} ${r} 0 ${largeArc} 1 ${x(angle)} ${y(angle)}`} fill="none" stroke="var(--brand)" strokeWidth="12" strokeLinecap="round" />
-      <text x="100" y="92" textAnchor="middle" fontSize="28" fontWeight="800" fill="var(--text)">{value.toFixed(2)}</text>
-      <text x="100" y="108" textAnchor="middle" fontSize="9" fill="var(--text-muted)">Anomaly Score</text>
+      <text x="100" y="92" textAnchor="middle" fontSize="28" fontWeight="800" fill="var(--text)">{valid ? formatGaugeValue(display) : "n/a"}</text>
+      <text x="100" y="108" textAnchor="middle" fontSize="9" fill="var(--text-muted)">{caption}</text>
       <text x="20" y="114" fontSize="9" fill="var(--text-subtle)">0</text>
       <text x="172" y="114" fontSize="9" fill="var(--text-subtle)">1</text>
     </svg>

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check:gauge": "node scripts/check-gauge-scale.cjs"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.4.0",

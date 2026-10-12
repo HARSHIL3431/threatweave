@@ -153,7 +153,7 @@ export const STAGE_DEFS = [
   { n: "02", title: "Preprocessing", desc: "Clean, transform and engineer features", accent: "var(--blue)" },
   { n: "03", title: "Anomaly Detection", desc: "E2 Isolation Forest model scoring", accent: "var(--green)" },
   { n: "04", title: "Anomaly Score", desc: "Numeric score with threshold comparison", accent: "var(--amber)" },
-  { n: "05", title: "Severity Classification", desc: "Risk-based severity (Info → Critical)", accent: "var(--orange)" },
+  { n: "05", title: "Severity Classification", desc: "Score-based severity (Info → Critical)", accent: "var(--orange)" },
   { n: "06", title: "Attack Context", desc: "MITRE ATT&CK mapping and knowledge retrieval", accent: "var(--brand)" },
   { n: "07", title: "Intelligence Report", desc: "LLM-generated analysis and recommendations", accent: "var(--indigo)" },
 ];
@@ -163,7 +163,7 @@ export const DEMO_STEP_DEFS = [
   { n: "02", title: "Preprocessing", desc: "Zero-duration handling, log transformations, feature engineering", accent: "var(--blue)" },
   { n: "03", title: "Anomaly Detection", desc: "E2 Isolation Forest model scoring (60 features)", accent: "var(--green)" },
   { n: "04", title: "Anomaly Score", desc: "Numeric score with threshold comparison", accent: "var(--amber)" },
-  { n: "05", title: "Severity Classification", desc: "Risk-based severity level (Info → Critical)", accent: "var(--orange)" },
+  { n: "05", title: "Severity Classification", desc: "Score-based severity level (Info → Critical)", accent: "var(--orange)" },
   { n: "06", title: "Attack Context", desc: "MITRE ATT&CK mapping and knowledge retrieval", accent: "var(--brand)" },
   { n: "07", title: "Intelligence Report", desc: "LLM-generated analysis and recommendations", accent: "var(--indigo)" },
 ];
