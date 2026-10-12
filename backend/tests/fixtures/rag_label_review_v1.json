@@ -1,0 +1,1217 @@
+{
+  "version": "rag-label-review-v1",
+  "description": "Analyst adjudication queue for the synthetic RAG benchmarks. Every record starts pending with blank reviewer metadata; automated proposals are attributed analysis, never approvals. 17 v1 + 25 v2 records.",
+  "records": [
+    {
+      "case_id": "RB-001",
+      "benchmark_version": "rag-benchmark-v1",
+      "original": {
+        "query": "An adversary probes the network with ping sweeps and port scans to find live hosts before attacking.",
+        "expected_ids": [
+          "T1595",
+          "T1046"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Query describes ping sweeps plus port scans; T1595 Active Scanning covers probe-based reconnaissance and T1046 Network Service Discovery covers service listing. Both expected IDs match corpus definitions.",
+        "evidence_required": "Analyst confirms T1595/T1046 scope covers ping-sweep plus port-scan phrasing.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-002",
+      "benchmark_version": "rag-benchmark-v1",
+      "original": {
+        "query": "Malware lists the services running on remote Windows hosts to identify vulnerable targets.",
+        "expected_ids": [
+          "T1046"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Query is near-verbatim T1046 corpus language (listing services on remote hosts). Retrieval miss (T1569.002 Service Execution, a different behavior) is a lexical-overlap trap, not a label error.",
+        "evidence_required": "Analyst confirms T1046 vs T1569.002 distinction.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-003",
+      "benchmark_version": "rag-benchmark-v1",
+      "original": {
+        "query": "An attacker collects operating system version, patch level, and hardware details from a compromised workstation.",
+        "expected_ids": [
+          "T1082"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "OS/hardware detail collection matches T1082 corpus definition; retrieved at rank 1.",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-004",
+      "benchmark_version": "rag-benchmark-v1",
+      "original": {
+        "query": "An adversary dumps password hashes from LSASS process memory to steal credentials.",
+        "expected_ids": [
+          "T1003"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "LSASS hash dumping matches T1003 corpus definition; parent/sub-technique policy correctly credits T1003.001 at rank 1.",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-005",
+      "benchmark_version": "rag-benchmark-v1",
+      "original": {
+        "query": "An attacker tries thousands of common passwords against the corporate VPN login page.",
+        "expected_ids": [
+          "T1110"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "medium",
+        "rationale": "High-volume password guessing matches T1110 corpus definition. Retrieved T1056.003 (Web Portal Capture, credential theft at a VPN login page) is a genuinely nearby alternative mechanism for this scenario, not a label error.",
+        "evidence_required": "Analyst confirms T1110 scope and that T1056.003 overlap is acceptable ambiguity.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-006",
+      "benchmark_version": "rag-benchmark-v1",
+      "original": {
+        "query": "Malware creates a scheduled task so its payload runs every time a user logs on.",
+        "expected_ids": [
+          "T1053",
+          "T1547"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Scheduled-task creation plus logon-triggered execution matches T1053 and T1547 corpus definitions; T1053 retrieved at rank 1.",
+        "evidence_required": "Analyst confirms dual-label acceptability.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-007",
+      "benchmark_version": "rag-benchmark-v1",
+      "original": {
+        "query": "An attacker runs malicious PowerShell commands through the Windows command interpreter on a victim host.",
+        "expected_ids": [
+          "T1059"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "PowerShell-through-interpreter matches T1059 corpus definition; T1059.001 at rank 1.",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-008",
+      "benchmark_version": "rag-benchmark-v1",
+      "original": {
+        "query": "A threat actor injects malicious code into a legitimate running process to hide from defenses.",
+        "expected_ids": [
+          "T1055"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Code injection into legitimate processes matches T1055 corpus definition; rank 1 hit.",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-009",
+      "benchmark_version": "rag-benchmark-v1",
+      "original": {
+        "query": "An adversary logs in over SSH with stolen credentials and copies hacking tools onto the newly accessed server.",
+        "expected_ids": [
+          "T1021",
+          "T1570"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "SSH login plus tool copying matches T1021 and T1570 corpus definitions; T1021 retrieved at rank 3. Top hit T1563.001 (SSH Hijacking, session theft rather than credential login) is nearby but mechanistically distinct.",
+        "evidence_required": "Analyst confirms T1021/T1570 scope and T1563.001 distinction.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-010",
+      "benchmark_version": "rag-benchmark-v1",
+      "original": {
+        "query": "Stolen documents are smuggled out hidden inside ordinary command-and-control web traffic.",
+        "expected_ids": [
+          "T1041"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Smuggling documents inside C2 web traffic matches T1041 corpus definition. Retrieved T1027.006 (HTML Smuggling) and T1020 (Automated Exfiltration) are mechanism-adjacent misses, not evidence against the label.",
+        "evidence_required": "Analyst confirms T1041 scope for C2-channeled exfiltration.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-011",
+      "benchmark_version": "rag-benchmark-v1",
+      "original": {
+        "query": "An attacker passively sniffs network traffic to capture passwords sent in clear text.",
+        "expected_ids": [
+          "T1040"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Passive traffic capture for cleartext passwords matches T1040 corpus definition; rank 1 hit.",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-012",
+      "benchmark_version": "rag-benchmark-v1",
+      "original": {
+        "query": "Malware searches the local file system and application configuration files for sensitive documents.",
+        "expected_ids": [
+          "T1005"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Searching local filesystems and configs matches T1005 corpus definition near-verbatim. Retrieved T1608.001/T1204.002 concern different attack stages despite lexical file overlap.",
+        "evidence_required": "Analyst confirms T1005 scope.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-013",
+      "benchmark_version": "rag-benchmark-v1",
+      "original": {
+        "query": "A keylogger records everything the user types in order to steal login credentials.",
+        "expected_ids": [
+          "T1056"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Keystroke capture for credentials matches T1056 corpus definition; T1056.001 at rank 1.",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-014",
+      "benchmark_version": "rag-benchmark-v1",
+      "original": {
+        "query": "An intruder deletes system event logs to erase evidence of their activity.",
+        "expected_ids": [
+          "T1070"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "needs-domain-review",
+        "confidence": "medium",
+        "rationale": "Deleting system event logs matches T1070 corpus definition, but retrieved T1685.005 (Clear Windows Event Logs, sub-technique of T1685 Disable or Modify Tools) is arguably an equally-or-more specific correct answer that the label does not credit (metric counts only rank-5 T1070.004). Whether T1685-family answers are acceptable here is a genuine ATT&CK taxonomy question.",
+        "evidence_required": "ATT&CK expertise on T1070 vs T1685.005 scope overlap for event-log deletion; decision whether to credit the T1685 family.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": {
+        "type": "label",
+        "detail": "Consider also accepting T1685/T1685.005 for RB-014 if taxonomy review finds event-log deletion in scope for both. Do NOT apply without analyst sign-off."
+      },
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-015",
+      "benchmark_version": "rag-benchmark-v1",
+      "original": {
+        "query": "An attacker fingerprints which TCP ports are open on the company mail server.",
+        "expected_ids": [
+          "T1046"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Open-port fingerprinting of a named server matches T1046 corpus definition; thematic overlap with RB-001/RB-002 is intentional policy probing.",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-N01",
+      "benchmark_version": "rag-benchmark-v1",
+      "original": {
+        "query": "How do I fix the quarterly budget spreadsheet formulas in Excel?",
+        "expected_ids": [],
+        "no_match": true
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Office-IT question with no ATT&CK content; low scores observed (0.221).",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-N02",
+      "benchmark_version": "rag-benchmark-v1",
+      "original": {
+        "query": "Employee onboarding schedule for the new office kitchen renovation next month.",
+        "expected_ids": [],
+        "no_match": true
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Administrative text with no ATT&CK content; low scores observed (0.252).",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-001",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "An adversary probes the network with ping sweeps and port scans to find live hosts before attacking.",
+        "expected_ids": [
+          "T1595",
+          "T1046"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Query describes ping sweeps plus port scans; T1595 Active Scanning covers probe-based reconnaissance and T1046 Network Service Discovery covers service listing. Both expected IDs match corpus definitions.",
+        "evidence_required": "Analyst confirms T1595/T1046 scope covers ping-sweep plus port-scan phrasing.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-002",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "Malware lists the services running on remote Windows hosts to identify vulnerable targets.",
+        "expected_ids": [
+          "T1046"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Query is near-verbatim T1046 corpus language (listing services on remote hosts). Retrieval miss (T1569.002 Service Execution, a different behavior) is a lexical-overlap trap, not a label error.",
+        "evidence_required": "Analyst confirms T1046 vs T1569.002 distinction.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-003",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "An attacker collects operating system version, patch level, and hardware details from a compromised workstation.",
+        "expected_ids": [
+          "T1082"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "OS/hardware detail collection matches T1082 corpus definition; retrieved at rank 1.",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-004",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "An adversary dumps password hashes from LSASS process memory to steal credentials.",
+        "expected_ids": [
+          "T1003"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "LSASS hash dumping matches T1003 corpus definition; parent/sub-technique policy correctly credits T1003.001 at rank 1.",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-005",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "An attacker tries thousands of common passwords against the corporate VPN login page.",
+        "expected_ids": [
+          "T1110"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "medium",
+        "rationale": "High-volume password guessing matches T1110 corpus definition. Retrieved T1056.003 (Web Portal Capture, credential theft at a VPN login page) is a genuinely nearby alternative mechanism for this scenario, not a label error.",
+        "evidence_required": "Analyst confirms T1110 scope and that T1056.003 overlap is acceptable ambiguity.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-006",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "Malware creates a scheduled task so its payload runs every time a user logs on.",
+        "expected_ids": [
+          "T1053",
+          "T1547"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Scheduled-task creation plus logon-triggered execution matches T1053 and T1547 corpus definitions; T1053 retrieved at rank 1.",
+        "evidence_required": "Analyst confirms dual-label acceptability.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-007",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "An attacker runs malicious PowerShell commands through the Windows command interpreter on a victim host.",
+        "expected_ids": [
+          "T1059"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "PowerShell-through-interpreter matches T1059 corpus definition; T1059.001 at rank 1.",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-008",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "A threat actor injects malicious code into a legitimate running process to hide from defenses.",
+        "expected_ids": [
+          "T1055"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Code injection into legitimate processes matches T1055 corpus definition; rank 1 hit.",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-009",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "An adversary logs in over SSH with stolen credentials and copies hacking tools onto the newly accessed server.",
+        "expected_ids": [
+          "T1021",
+          "T1570"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "SSH login plus tool copying matches T1021 and T1570 corpus definitions; T1021 retrieved at rank 3. Top hit T1563.001 (SSH Hijacking, session theft rather than credential login) is nearby but mechanistically distinct.",
+        "evidence_required": "Analyst confirms T1021/T1570 scope and T1563.001 distinction.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-010",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "Stolen documents are smuggled out hidden inside ordinary command-and-control web traffic.",
+        "expected_ids": [
+          "T1041"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Smuggling documents inside C2 web traffic matches T1041 corpus definition. Retrieved T1027.006 (HTML Smuggling) and T1020 (Automated Exfiltration) are mechanism-adjacent misses, not evidence against the label.",
+        "evidence_required": "Analyst confirms T1041 scope for C2-channeled exfiltration.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-011",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "An attacker passively sniffs network traffic to capture passwords sent in clear text.",
+        "expected_ids": [
+          "T1040"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Passive traffic capture for cleartext passwords matches T1040 corpus definition; rank 1 hit.",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-012",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "Malware searches the local file system and application configuration files for sensitive documents.",
+        "expected_ids": [
+          "T1005"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Searching local filesystems and configs matches T1005 corpus definition near-verbatim. Retrieved T1608.001/T1204.002 concern different attack stages despite lexical file overlap.",
+        "evidence_required": "Analyst confirms T1005 scope.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-013",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "A keylogger records everything the user types in order to steal login credentials.",
+        "expected_ids": [
+          "T1056"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Keystroke capture for credentials matches T1056 corpus definition; T1056.001 at rank 1.",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-014",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "An intruder deletes system event logs to erase evidence of their activity.",
+        "expected_ids": [
+          "T1070"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "needs-domain-review",
+        "confidence": "medium",
+        "rationale": "Deleting system event logs matches T1070 corpus definition, but retrieved T1685.005 (Clear Windows Event Logs, sub-technique of T1685 Disable or Modify Tools) is arguably an equally-or-more specific correct answer that the label does not credit (metric counts only rank-5 T1070.004). Whether T1685-family answers are acceptable here is a genuine ATT&CK taxonomy question.",
+        "evidence_required": "ATT&CK expertise on T1070 vs T1685.005 scope overlap for event-log deletion; decision whether to credit the T1685 family.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": {
+        "type": "label",
+        "detail": "Consider also accepting T1685/T1685.005 for RB-014 if taxonomy review finds event-log deletion in scope for both. Do NOT apply without analyst sign-off."
+      },
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-015",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "An attacker fingerprints which TCP ports are open on the company mail server.",
+        "expected_ids": [
+          "T1046"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Open-port fingerprinting of a named server matches T1046 corpus definition; thematic overlap with RB-001/RB-002 is intentional policy probing.",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-N01",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "How do I fix the quarterly budget spreadsheet formulas in Excel?",
+        "expected_ids": [],
+        "no_match": true
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Office-IT question with no ATT&CK content; low scores observed (0.221).",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-N02",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "Employee onboarding schedule for the new office kitchen renovation next month.",
+        "expected_ids": [],
+        "no_match": true
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Administrative text with no ATT&CK content; low scores observed (0.252).",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-016",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "A user cannot log in after a password reset and the helpdesk says the account appears locked.",
+        "expected_ids": [
+          "T1110"
+        ],
+        "no_match": false
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "medium",
+        "rationale": "Wording sits in credential-guessing retrieval space and T1110 was retrieved (rank 4, recall 1.0), but the described event is most likely a benign lockout: relevance must not be read as malice. Label is fit for purpose ONLY as a relevance probe with this caveat recorded.",
+        "evidence_required": "Analyst confirms the relevance-without-malice framing; consider adding an explicit intent dimension to a future benchmark version.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": {
+        "type": "schema",
+        "detail": "Propose optional intent annotation (malicious|benign|ambiguous|insufficient-context) for a future benchmark version. Schema-only suggestion; does not change this label."
+      },
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-017",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "Scheduled antivirus scan completed overnight with no threats found on any workstation.",
+        "expected_ids": [],
+        "no_match": true
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Benign security-operations text; no ATT&CK behavior described. No-match label is correct; elevated top score (0.434) is a measurement about lexical attraction, not a label error.",
+        "evidence_required": "Analyst confirms no technique is described.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-N03",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "The printer on the third floor is jammed again, please send a replacement toner cartridge.",
+        "expected_ids": [],
+        "no_match": true
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Facilities request with no ATT&CK content.",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-N04",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "How do I write a SQL JOIN to combine the customers and orders tables?",
+        "expected_ids": [],
+        "no_match": true
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Database help question; technical but non-security content.",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-N05",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "Photos from the team offsite last weekend are in the shared album.",
+        "expected_ids": [],
+        "no_match": true
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Personal chatter; far out-of-domain probe.",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-N06",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "Restart the Jenkins build agent on the Windows build server after patching.",
+        "expected_ids": [],
+        "no_match": true
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "medium",
+        "rationale": "Routine admin action without malicious intent; borderline operational wording could lexically resemble execution content, informative either way.",
+        "evidence_required": "Analyst confirms benign-administrative reading.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-N07",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "Quarterly sales figures rose twelve percent year over year, beating the forecast.",
+        "expected_ids": [],
+        "no_match": true
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "high",
+        "rationale": "Business prose with no ATT&CK content.",
+        "evidence_required": "Routine confirmation.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    },
+    {
+      "case_id": "RB-N08",
+      "benchmark_version": "rag-benchmark-v2",
+      "original": {
+        "query": "the",
+        "expected_ids": [],
+        "no_match": true
+      },
+      "synthetic": true,
+      "human_review_recorded": false,
+      "status": "pending",
+      "automated_proposal": {
+        "outcome": "accept",
+        "confidence": "medium",
+        "rationale": "Degenerate single-stopword input; measures worst-case score behavior rather than correctness. No-match is the only honest expectation.",
+        "evidence_required": "Analyst confirms degenerate-input framing.",
+        "analyzer": "automated-analysis"
+      },
+      "proposed_change": null,
+      "reviewer": {
+        "identity": null,
+        "date": null,
+        "decision": null,
+        "rationale": null
+      },
+      "review_instructions": "Analyst: set reviewer.identity/date/decision/rationale and flip status to decided to approve, revise, or reject. Automated proposals are suggestions only. See docs/reliability/RAG_BENCHMARK_LABEL_AUDIT.md."
+    }
+  ]
+}

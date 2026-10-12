@@ -1,0 +1,271 @@
+{
+  "version": "rag-benchmark-v2",
+  "description": "Superset of rag-benchmark-v1 (all 17 v1 cases preserved byte-identically) plus 8 P1-4 cases: gray-zone security descriptions (RB-016/017) and varied benign/low-information no-match probes (RB-N03..N08). Labels are synthetic and NOT expert-validated.",
+  "based_on": {
+    "benchmark": "rag-benchmark-v1",
+    "preserved_cases": 17,
+    "preservation": "v1 case payloads copied without modification"
+  },
+  "cases": [
+    {
+      "case_id": "RB-001",
+      "query": "An adversary probes the network with ping sweeps and port scans to find live hosts before attacking.",
+      "expected_ids": [
+        "T1595",
+        "T1046"
+      ],
+      "no_match": false,
+      "label_provenance": "synthetic",
+      "rationale": "Active scanning covers probe-based reconnaissance; open-port fingerprinting overlaps network service discovery.",
+      "ambiguity": "Multiple acceptable labels by design; either ID at rank 1 is a hit."
+    },
+    {
+      "case_id": "RB-002",
+      "query": "Malware lists the services running on remote Windows hosts to identify vulnerable targets.",
+      "expected_ids": [
+        "T1046"
+      ],
+      "no_match": false,
+      "label_provenance": "synthetic",
+      "rationale": "Listing remote services is the canonical Network Service Discovery behavior.",
+      "ambiguity": "None known."
+    },
+    {
+      "case_id": "RB-003",
+      "query": "An attacker collects operating system version, patch level, and hardware details from a compromised workstation.",
+      "expected_ids": [
+        "T1082"
+      ],
+      "no_match": false,
+      "label_provenance": "synthetic",
+      "rationale": "OS/hardware detail collection is System Information Discovery.",
+      "ambiguity": "None known."
+    },
+    {
+      "case_id": "RB-004",
+      "query": "An adversary dumps password hashes from LSASS process memory to steal credentials.",
+      "expected_ids": [
+        "T1003"
+      ],
+      "no_match": false,
+      "label_provenance": "synthetic",
+      "rationale": "Credential dumping from system memory is OS Credential Dumping; sub-techniques exist but the parent label is the stable expectation.",
+      "ambiguity": "A retrieved T1003 sub-technique also counts per the parent/sub-technique policy."
+    },
+    {
+      "case_id": "RB-005",
+      "query": "An attacker tries thousands of common passwords against the corporate VPN login page.",
+      "expected_ids": [
+        "T1110"
+      ],
+      "no_match": false,
+      "label_provenance": "synthetic",
+      "rationale": "High-volume password guessing is Brute Force.",
+      "ambiguity": "T1078 Valid Accounts is a related but distinct outcome (use of accounts, not guessing); not counted."
+    },
+    {
+      "case_id": "RB-006",
+      "query": "Malware creates a scheduled task so its payload runs every time a user logs on.",
+      "expected_ids": [
+        "T1053",
+        "T1547"
+      ],
+      "no_match": false,
+      "label_provenance": "synthetic",
+      "rationale": "Task-scheduler abuse matches Scheduled Task/Job; logon-triggered persistence matches Boot or Logon Autostart Execution.",
+      "ambiguity": "Multiple acceptable labels by design."
+    },
+    {
+      "case_id": "RB-007",
+      "query": "An attacker runs malicious PowerShell commands through the Windows command interpreter on a victim host.",
+      "expected_ids": [
+        "T1059"
+      ],
+      "no_match": false,
+      "label_provenance": "synthetic",
+      "rationale": "Abusing a command/script interpreter for execution.",
+      "ambiguity": "None known."
+    },
+    {
+      "case_id": "RB-008",
+      "query": "A threat actor injects malicious code into a legitimate running process to hide from defenses.",
+      "expected_ids": [
+        "T1055"
+      ],
+      "no_match": false,
+      "label_provenance": "synthetic",
+      "rationale": "Code injection into processes is Process Injection.",
+      "ambiguity": "None known."
+    },
+    {
+      "case_id": "RB-009",
+      "query": "An adversary logs in over SSH with stolen credentials and copies hacking tools onto the newly accessed server.",
+      "expected_ids": [
+        "T1021",
+        "T1570"
+      ],
+      "no_match": false,
+      "label_provenance": "synthetic",
+      "rationale": "Remote-service logins plus tool transfer between hosts cover Remote Services and Lateral Tool Transfer.",
+      "ambiguity": "T1078 Valid Accounts is related but not counted; either expected ID is a hit."
+    },
+    {
+      "case_id": "RB-010",
+      "query": "Stolen documents are smuggled out hidden inside ordinary command-and-control web traffic.",
+      "expected_ids": [
+        "T1041"
+      ],
+      "no_match": false,
+      "label_provenance": "synthetic",
+      "rationale": "Exfiltration over an existing C2 channel.",
+      "ambiguity": "T1071 Application Layer Protocol is related C2 behavior but not counted."
+    },
+    {
+      "case_id": "RB-011",
+      "query": "An attacker passively sniffs network traffic to capture passwords sent in clear text.",
+      "expected_ids": [
+        "T1040"
+      ],
+      "no_match": false,
+      "label_provenance": "synthetic",
+      "rationale": "Passive traffic capture for credentials is Network Sniffing.",
+      "ambiguity": "None known."
+    },
+    {
+      "case_id": "RB-012",
+      "query": "Malware searches the local file system and application configuration files for sensitive documents.",
+      "expected_ids": [
+        "T1005"
+      ],
+      "no_match": false,
+      "label_provenance": "synthetic",
+      "rationale": "Searching local system sources is Data from Local System.",
+      "ambiguity": "None known."
+    },
+    {
+      "case_id": "RB-013",
+      "query": "A keylogger records everything the user types in order to steal login credentials.",
+      "expected_ids": [
+        "T1056"
+      ],
+      "no_match": false,
+      "label_provenance": "synthetic",
+      "rationale": "Capturing user keystrokes is Input Capture.",
+      "ambiguity": "None known."
+    },
+    {
+      "case_id": "RB-014",
+      "query": "An intruder deletes system event logs to erase evidence of their activity.",
+      "expected_ids": [
+        "T1070"
+      ],
+      "no_match": false,
+      "label_provenance": "synthetic",
+      "rationale": "Deleting generated artifacts to hide presence is Indicator Removal.",
+      "ambiguity": "None known."
+    },
+    {
+      "case_id": "RB-015",
+      "query": "An attacker fingerprints which TCP ports are open on the company mail server.",
+      "expected_ids": [
+        "T1046"
+      ],
+      "no_match": false,
+      "label_provenance": "synthetic",
+      "rationale": "Open-port fingerprinting against a specific server; probes the parent/sub-technique policy if a T1046 sub-technique is returned.",
+      "ambiguity": "Overlaps RB-001/RB-002 thematically by design."
+    },
+    {
+      "case_id": "RB-N01",
+      "query": "How do I fix the quarterly budget spreadsheet formulas in Excel?",
+      "expected_ids": [],
+      "no_match": true,
+      "label_provenance": "synthetic",
+      "rationale": "Benign office-IT question with no ATT&CK relevance; measures whether the pipeline returns confidently-scored techniques anyway.",
+      "ambiguity": "The pipeline has no score threshold, so results are always returned; evaluation records scores rather than asserting emptiness."
+    },
+    {
+      "case_id": "RB-N02",
+      "query": "Employee onboarding schedule for the new office kitchen renovation next month.",
+      "expected_ids": [],
+      "no_match": true,
+      "label_provenance": "synthetic",
+      "rationale": "Unrelated administrative text; same no-match measurement purpose as RB-N01.",
+      "ambiguity": "Same as RB-N01."
+    },
+    {
+      "case_id": "RB-016",
+      "query": "A user cannot log in after a password reset and the helpdesk says the account appears locked.",
+      "expected_ids": [
+        "T1110"
+      ],
+      "no_match": false,
+      "label_provenance": "synthetic",
+      "rationale": "Wording overlaps credential-guessing retrieval space; labeled Brute Force as the nearest technique family while most real instances are benign lockouts.",
+      "ambiguity": "Deliberate gray zone: retrieval relevance must not be read as malice; a benign IT issue produces near-identical text."
+    },
+    {
+      "case_id": "RB-017",
+      "query": "Scheduled antivirus scan completed overnight with no threats found on any workstation.",
+      "expected_ids": [],
+      "no_match": true,
+      "label_provenance": "synthetic",
+      "rationale": "Benign security-operations text; correct behavior is low scores, though results are still returned because the pipeline has no threshold.",
+      "ambiguity": "Security vocabulary may lexically attract detections; expectation is low scores, recorded not asserted as empty."
+    },
+    {
+      "case_id": "RB-N03",
+      "query": "The printer on the third floor is jammed again, please send a replacement toner cartridge.",
+      "expected_ids": [],
+      "no_match": true,
+      "label_provenance": "synthetic",
+      "rationale": "Benign facilities request; no ATT&CK relevance expected.",
+      "ambiguity": "Same no-threshold caveat as RB-N01."
+    },
+    {
+      "case_id": "RB-N04",
+      "query": "How do I write a SQL JOIN to combine the customers and orders tables?",
+      "expected_ids": [],
+      "no_match": true,
+      "label_provenance": "synthetic",
+      "rationale": "Unrelated technical question (databases, not security); measures score behavior on technical-but-irrelevant text.",
+      "ambiguity": "Same no-threshold caveat as RB-N01."
+    },
+    {
+      "case_id": "RB-N05",
+      "query": "Photos from the team offsite last weekend are in the shared album.",
+      "expected_ids": [],
+      "no_match": true,
+      "label_provenance": "synthetic",
+      "rationale": "Low-information personal chatter; far out-of-domain probe.",
+      "ambiguity": "Same no-threshold caveat as RB-N01."
+    },
+    {
+      "case_id": "RB-N06",
+      "query": "Restart the Jenkins build agent on the Windows build server after patching.",
+      "expected_ids": [],
+      "no_match": true,
+      "label_provenance": "synthetic",
+      "rationale": "Routine admin action; operational wording without malicious intent. May lexically resemble execution/persistence content, which is informative either way.",
+      "ambiguity": "Borderline administrative action; expectation is low scores, not guaranteed irrelevance."
+    },
+    {
+      "case_id": "RB-N07",
+      "query": "Quarterly sales figures rose twelve percent year over year, beating the forecast.",
+      "expected_ids": [],
+      "no_match": true,
+      "label_provenance": "synthetic",
+      "rationale": "Benign business prose; no ATT&CK relevance expected.",
+      "ambiguity": "Same no-threshold caveat as RB-N01."
+    },
+    {
+      "case_id": "RB-N08",
+      "query": "the",
+      "expected_ids": [],
+      "no_match": true,
+      "label_provenance": "synthetic",
+      "rationale": "Degenerate low-information query (single stopword); valid non-empty input that probes worst-case score behavior.",
+      "ambiguity": "Scores may be arbitrary; the case measures behavior, not correctness."
+    }
+  ]
+}
