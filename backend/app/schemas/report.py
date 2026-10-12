@@ -5,8 +5,10 @@ from pydantic import BaseModel, ConfigDict, Field
 from app.schemas.detection import NetworkFlowRequest
 from app.schemas.llm import LLMExplanationOutput
 
-#: Allowed report kinds. "analysis" is the general form; "anomaly"/"benign"
-#: hint the expected outcome and slightly vary the interpretation wording.
+#: Allowed report kinds. "analysis" is neutral and always permitted.
+#: "anomaly"/"benign" assert the expected outcome and are rejected with
+#: 422 INVALID_INPUT when they contradict the computed detection result,
+#: so a benign flow can never be exported as an anomaly report or vice versa.
 ReportType = Literal["analysis", "anomaly", "benign"]
 
 

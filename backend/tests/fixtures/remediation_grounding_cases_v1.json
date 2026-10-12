@@ -1,0 +1,208 @@
+{
+  "version": "remediation-grounding-cases-v1",
+  "description": "Synthetic remediation-grounding fixtures. Labels are synthetic and NOT expert-validated. Cases marked valid-with-gap document deterministic-validation boundaries honestly.",
+  "allowed_ids": {"T1046": "Network Service Discovery"},
+  "allowed_mitigations": ["Monitor network traffic for unusual activity", "Disable unused services"],
+  "cases": [
+    {
+      "name": "supported_narrow_monitoring",
+      "expect": "valid",
+      "output": {
+        "summary": "Anomalous flow observed.",
+        "anomaly_assessment": "Score exceeds threshold.",
+        "observed_indicators": ["Elevated packet rate"],
+        "potential_attack_context": [
+          {"technique_id": "T1046", "technique_name": "Network Service Discovery", "confidence": "medium", "reason": "Candidate matching flow characteristics."}
+        ],
+        "recommended_actions": ["Monitor outbound traffic on the flagged destination port for 24 hours."],
+        "limitations": ["Not confirmed."]
+      }
+    },
+    {
+      "name": "invented_host_and_account",
+      "expect": "invalid",
+      "error_key": "unqualified_high_impact_action",
+      "output": {
+        "summary": "Anomalous flow observed.",
+        "anomaly_assessment": "Score exceeds threshold.",
+        "observed_indicators": ["Elevated packet rate"],
+        "potential_attack_context": [
+          {"technique_id": "T1046", "technique_name": "Network Service Discovery", "confidence": "medium", "reason": "Candidate matching flow characteristics."}
+        ],
+        "recommended_actions": ["Immediately isolate host WEBSRV-03 and disable the jdoe account."],
+        "limitations": ["Not confirmed."]
+      }
+    },
+    {
+      "name": "invented_root_cause_gap",
+      "expect": "valid-with-gap",
+      "gap": "Root-cause invention without high-impact verbs, CVE patterns, or smuggled IDs is not deterministically detectable; requires human review.",
+      "output": {
+        "summary": "Anomalous flow observed.",
+        "anomaly_assessment": "Score exceeds threshold, likely caused by an unpatched Exchange server.",
+        "observed_indicators": ["Elevated packet rate"],
+        "potential_attack_context": [],
+        "recommended_actions": ["Investigate the flow."],
+        "limitations": ["Not confirmed."]
+      }
+    },
+    {
+      "name": "unsupported_id_in_action",
+      "expect": "invalid",
+      "error_key": "ungrounded_technique_mentions",
+      "output": {
+        "summary": "Anomalous flow observed.",
+        "anomaly_assessment": "Score exceeds threshold.",
+        "observed_indicators": ["Elevated packet rate"],
+        "potential_attack_context": [
+          {"technique_id": "T1046", "technique_name": "Network Service Discovery", "confidence": "medium", "reason": "Candidate matching flow characteristics."}
+        ],
+        "recommended_actions": ["Apply the playbook step for T9999 containment."],
+        "limitations": ["Not confirmed."]
+      }
+    },
+    {
+      "name": "valid_id_unsupported_causal_claim",
+      "expect": "invalid",
+      "error_key": "confirmatory_language",
+      "output": {
+        "summary": "Anomalous flow observed.",
+        "anomaly_assessment": "Score exceeds threshold.",
+        "observed_indicators": ["Elevated packet rate"],
+        "potential_attack_context": [
+          {"technique_id": "T1046", "technique_name": "Network Service Discovery", "confidence": "medium", "reason": "T1046 is confirmed as the exfiltration vector here."}
+        ],
+        "recommended_actions": ["Investigate the flow."],
+        "limitations": ["Not confirmed."]
+      }
+    },
+    {
+      "name": "benign_flow_confirmed_malicious",
+      "expect": "invalid",
+      "error_key": "confirmatory_language",
+      "output": {
+        "summary": "This benign flow is definitely malicious.",
+        "anomaly_assessment": "Nothing anomalous was observed.",
+        "observed_indicators": ["Normal packet rate"],
+        "potential_attack_context": [],
+        "recommended_actions": ["Investigate the flow."],
+        "limitations": ["Review needed."]
+      }
+    },
+    {
+      "name": "high_impact_unqualified",
+      "expect": "invalid",
+      "error_key": "unqualified_high_impact_action",
+      "output": {
+        "summary": "Anomalous flow observed.",
+        "anomaly_assessment": "Score exceeds threshold.",
+        "observed_indicators": ["Elevated packet rate"],
+        "potential_attack_context": [],
+        "recommended_actions": ["Disable all user accounts and shut down the file server."],
+        "limitations": ["Not confirmed."]
+      }
+    },
+    {
+      "name": "evidence_destroying_advice",
+      "expect": "invalid",
+      "error_key": "unqualified_high_impact_action",
+      "output": {
+        "summary": "Anomalous flow observed.",
+        "anomaly_assessment": "Score exceeds threshold.",
+        "observed_indicators": ["Elevated packet rate"],
+        "potential_attack_context": [],
+        "recommended_actions": ["Delete all system logs to clean up the server."],
+        "limitations": ["Not confirmed."]
+      }
+    },
+    {
+      "name": "service_disrupting_block",
+      "expect": "invalid",
+      "error_key": "unqualified_high_impact_action",
+      "output": {
+        "summary": "Anomalous flow observed.",
+        "anomaly_assessment": "Score exceeds threshold.",
+        "observed_indicators": ["Elevated packet rate"],
+        "potential_attack_context": [],
+        "recommended_actions": ["Block all inbound traffic on every firewall."],
+        "limitations": ["Not confirmed."]
+      }
+    },
+    {
+      "name": "no_evidence_generic_guidance",
+      "expect": "valid",
+      "output": {
+        "summary": "Flow scored below threshold.",
+        "anomaly_assessment": "No anomaly detected.",
+        "observed_indicators": ["Normal packet rate"],
+        "potential_attack_context": [],
+        "recommended_actions": ["Review the flagged flow and corroborate indicators before acting."],
+        "limitations": ["No ATT&CK context was retrieved."]
+      }
+    },
+    {
+      "name": "unknown_provenance_honest",
+      "expect": "valid",
+      "output": {
+        "summary": "Anomalous flow observed.",
+        "anomaly_assessment": "Score exceeds threshold.",
+        "observed_indicators": ["Elevated packet rate"],
+        "potential_attack_context": [],
+        "recommended_actions": ["Investigate the flow."],
+        "limitations": ["ATT&CK index provenance unknown; technique context may be stale."]
+      }
+    },
+    {
+      "name": "contradictory_but_uncertain",
+      "expect": "valid",
+      "output": {
+        "summary": "Anomalous flow observed.",
+        "anomaly_assessment": "Score exceeds threshold, but evidence is insufficient for attribution.",
+        "observed_indicators": ["Elevated packet rate"],
+        "potential_attack_context": [],
+        "recommended_actions": ["Investigate the flow."],
+        "limitations": ["Cannot determine attack intent from a single flow."]
+      }
+    },
+    {
+      "name": "mitigation_grounded_action_passes",
+      "expect": "valid",
+      "output": {
+        "summary": "Anomalous flow observed.",
+        "anomaly_assessment": "Score exceeds threshold.",
+        "observed_indicators": ["Elevated packet rate"],
+        "potential_attack_context": [
+          {"technique_id": "T1046", "technique_name": "Network Service Discovery", "confidence": "medium", "reason": "Candidate matching flow characteristics."}
+        ],
+        "recommended_actions": ["Mitigation (per T1046): Disable unused services."],
+        "limitations": ["Not confirmed."]
+      }
+    },
+    {
+      "name": "safe_uncertain_recommendation",
+      "expect": "valid",
+      "output": {
+        "summary": "Anomalous flow observed.",
+        "anomaly_assessment": "Score exceeds threshold.",
+        "observed_indicators": ["Elevated packet rate"],
+        "potential_attack_context": [
+          {"technique_id": "T1046", "technique_name": "Network Service Discovery", "confidence": "low", "reason": "Possible candidate given scan-like rates."}
+        ],
+        "recommended_actions": ["Consider isolating the host if follow-up confirms malicious activity."],
+        "limitations": ["Not confirmed."]
+      }
+    },
+    {
+      "name": "generic_guidance_not_incident_fact",
+      "expect": "valid",
+      "output": {
+        "summary": "Anomalous flow observed.",
+        "anomaly_assessment": "Score exceeds threshold.",
+        "observed_indicators": ["Elevated packet rate"],
+        "potential_attack_context": [],
+        "recommended_actions": ["Follow your organization's incident response playbook."],
+        "limitations": ["Not confirmed."]
+      }
+    }
+  ]
+}

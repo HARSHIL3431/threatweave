@@ -1,0 +1,104 @@
+{
+  "version": "llm-grounding-cases-v1",
+  "description": "Synthetic provider-output cases for explanation-grounding validation. Labels are synthetic and NOT expert-validated; they encode the intended verdicts of the deterministic validator.",
+  "allowed": {"T1046": "Network Service Discovery"},
+  "cases": [
+    {
+      "name": "grounded_candidate",
+      "expect": "valid",
+      "output": {
+        "summary": "Anomalous flow observed.",
+        "anomaly_assessment": "Score exceeds threshold.",
+        "observed_indicators": ["Elevated packet rate"],
+        "potential_attack_context": [
+          {"technique_id": "T1046", "technique_name": "Network Service Discovery", "confidence": "medium", "reason": "Candidate matching flow characteristics."}
+        ],
+        "recommended_actions": ["Investigate the flow."],
+        "limitations": ["Not confirmed."]
+      }
+    },
+    {
+      "name": "smuggled_id_in_reason",
+      "expect": "invalid",
+      "error_key": "ungrounded_technique_mentions",
+      "output": {
+        "summary": "Anomalous flow observed.",
+        "anomaly_assessment": "Score exceeds threshold.",
+        "observed_indicators": ["Elevated packet rate"],
+        "potential_attack_context": [
+          {"technique_id": "T1046", "technique_name": "Network Service Discovery", "confidence": "medium", "reason": "Possibly related to T9999 activity as well."}
+        ],
+        "recommended_actions": ["Investigate the flow."],
+        "limitations": ["Not confirmed."]
+      }
+    },
+    {
+      "name": "confirmatory_claim",
+      "expect": "invalid",
+      "error_key": "confirmatory_language",
+      "output": {
+        "summary": "This flow is confirmed malicious.",
+        "anomaly_assessment": "Score exceeds threshold.",
+        "observed_indicators": ["Elevated packet rate"],
+        "potential_attack_context": [],
+        "recommended_actions": ["Investigate the flow."],
+        "limitations": ["Review needed."]
+      }
+    },
+    {
+      "name": "hedged_claim_passes",
+      "expect": "valid",
+      "output": {
+        "summary": "A possible attack that is not confirmed.",
+        "anomaly_assessment": "Score exceeds threshold; this may warrant review.",
+        "observed_indicators": ["Elevated packet rate"],
+        "potential_attack_context": [],
+        "recommended_actions": ["Investigate the flow."],
+        "limitations": ["Technique context is only candidate-level."]
+      }
+    },
+    {
+      "name": "empty_attack_context_without_rag",
+      "expect": "valid",
+      "allowed": {},
+      "output": {
+        "summary": "Flow scored below threshold.",
+        "anomaly_assessment": "No anomaly detected.",
+        "observed_indicators": ["Normal packet rate"],
+        "potential_attack_context": [],
+        "recommended_actions": ["No action needed."],
+        "limitations": ["No ATT&CK context was retrieved."]
+      }
+    },
+    {
+      "name": "name_mismatch",
+      "expect": "invalid",
+      "error_key": "technique_name_mismatch",
+      "output": {
+        "summary": "Anomalous flow observed.",
+        "anomaly_assessment": "Score exceeds threshold.",
+        "observed_indicators": ["Elevated packet rate"],
+        "potential_attack_context": [
+          {"technique_id": "T1046", "technique_name": "Wrong Name", "confidence": "medium", "reason": "Candidate."}
+        ],
+        "recommended_actions": ["Investigate the flow."],
+        "limitations": ["Not confirmed."]
+      }
+    },
+    {
+      "name": "bad_confidence",
+      "expect": "invalid",
+      "error_key": "invalid_confidence",
+      "output": {
+        "summary": "Anomalous flow observed.",
+        "anomaly_assessment": "Score exceeds threshold.",
+        "observed_indicators": ["Elevated packet rate"],
+        "potential_attack_context": [
+          {"technique_id": "T1046", "technique_name": "Network Service Discovery", "confidence": "certain", "reason": "Candidate."}
+        ],
+        "recommended_actions": ["Investigate the flow."],
+        "limitations": ["Not confirmed."]
+      }
+    }
+  ]
+}

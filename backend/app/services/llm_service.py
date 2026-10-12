@@ -23,6 +23,20 @@ from app.core.logging import get_logger
 from app.schemas.llm import LLMEvidence, LLMExplanationOutput
 from app.services.llm_providers import LLMProvider, create_provider
 from app.services.llm_validation import validate_llm_output
+from app.services.observability import (
+    CATEGORY_DEGRADED,
+    CATEGORY_OK,
+    CATEGORY_UNAVAILABLE,
+    CATEGORY_UNEXPECTED,
+    CATEGORY_VALIDATION,
+    LLM_EXPLANATION_DEGRADED,
+    LLM_GENERATE_COMPLETED,
+    LLM_GENERATE_FAILED,
+    LLM_VALIDATION_REJECTED,
+    category_for_error_code,
+    record_event,
+    record_latency,
+)
 
 logger = get_logger("llm_service")
 
@@ -79,33 +93,56 @@ class LLMService:
         (explanation, latency_ms).
         """
         if not self.enabled:
+            record_event(LLM_GENERATE_FAILED, CATEGORY_UNAVAILABLE)
             raise LLMUnavailableException(
                 "LLM explanation is disabled (LLM_ENABLED=false). "
                 "Detection remains fully functional."
             )
 
         allowed_ids = {t.technique_id: t.technique_name for t in evidence.rag_results}
+        allowed_mitigations = {
+            mitigation
+            for technique in evidence.rag_results
+            for mitigation in technique.mitigations
+        }
 
         start = time.perf_counter()
         try:
             raw = self.provider.generate(evidence)
             latency_ms = (time.perf_counter() - start) * 1000.0
-        except AppException:
+        except AppException as exc:
             latency_ms = (time.perf_counter() - start) * 1000.0
+            record_latency("llm.generate", latency_ms)
+            record_event(LLM_GENERATE_FAILED, category_for_error_code(exc.error_code))
             self._log(evidence, latency_ms, "failure", "rejected")
             raise
         except Exception as exc:  # belt-and-braces: never leak unexpected errors
             latency_ms = (time.perf_counter() - start) * 1000.0
+            record_latency("llm.generate", latency_ms)
+            record_event(LLM_GENERATE_FAILED, CATEGORY_UNEXPECTED)
             self._log(evidence, latency_ms, "failure", "rejected")
             raise LLMUnavailableException(
                 f"Unexpected LLM provider failure: {exc.__class__.__name__}"
             ) from exc
 
         try:
-            validated = validate_llm_output(raw, allowed_ids)
-        except AppException:
+            validated = validate_llm_output(raw, allowed_ids, allowed_mitigations)
+        except AppException as exc:
+            record_event(
+                LLM_VALIDATION_REJECTED,
+                sorted(exc.details)[0] if exc.details else CATEGORY_VALIDATION,
+            )
+            record_event(LLM_GENERATE_FAILED, CATEGORY_VALIDATION)
             self._log(evidence, latency_ms, "failure", "rejected")
             raise
+
+        record_latency("llm.generate", latency_ms)
+        record_event(LLM_GENERATE_COMPLETED, CATEGORY_OK)
+        if not evidence.rag_results:
+            # Explanation produced without ATT&CK context: usable but degraded.
+            record_event(LLM_EXPLANATION_DEGRADED, CATEGORY_DEGRADED)
+
+        validated = _ensure_context_limitation(validated, evidence)
 
         self._log(
             evidence, latency_ms, "success", "passed",
@@ -137,3 +174,29 @@ class LLMService:
             logger.info(f"LLM explanation generated: {payload}")
         else:
             logger.warning(f"LLM explanation failed: {payload}")
+
+
+def _ensure_context_limitation(
+    validated: LLMExplanationOutput, evidence: LLMEvidence
+) -> LLMExplanationOutput:
+    """Guarantee the output admits when no ATT&CK context was retrieved.
+
+    A real provider may omit the limitation the prompt requests; the mock
+    provider always states it. When RAG supplied nothing and no limitation
+    already says so, append a deterministic sentence. Never invents evidence
+    or technique claims; only states the absence of context.
+    """
+    if evidence.rag_results:
+        return validated
+    if any(
+        "att&ck" in (lim or "").lower()
+        or "mitre" in (lim or "").lower()
+        or "retriev" in (lim or "").lower()
+        for lim in validated.limitations
+    ):
+        return validated
+    validated.limitations.append(
+        "No MITRE ATT&CK context was retrieved, so no technique-level "
+        "conclusions can be drawn from this explanation."
+    )
+    return validated

@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, Header
 from fastapi.responses import FileResponse
 
 from app.core.logging import get_logger
+from app.core.exceptions import InvalidInputException
 from app.dependencies import (
     get_ml_service,
     get_rag_service_evidence,
@@ -51,14 +52,36 @@ def generate_report(
         request_id=request_id,
     )
 
+    # P0-3: the caller-chosen report_type must not contradict the computed
+    # outcome. "analysis" is neutral and always allowed; "anomaly"/"benign"
+    # that mismatch the detection would present a failed or negative result
+    # as its opposite, so they are rejected instead of rendered.
+    if request.report_type == "anomaly" and not packet.is_anomaly:
+        raise InvalidInputException(
+            "report_type 'anomaly' does not match the computed BENIGN outcome "
+            "for this flow. Use report_type 'analysis' or 'benign'."
+        )
+    if request.report_type == "benign" and packet.is_anomaly:
+        raise InvalidInputException(
+            "report_type 'benign' does not match the computed ANOMALOUS outcome "
+            "for this flow. Use report_type 'analysis' or 'anomaly'."
+        )
+
     # LLM explanation is optional input. If supplied it MUST pass the same
     # strict grounding validation used by /explain (ids subset of RAG results,
-    # correct names, valid confidence enum) before it may appear in a report.
+    # correct names, valid confidence enum, remediation grounding) before it
+    # may appear in a report.
     explanation = None
     if request.llm_explanation is not None:
         allowed_ids = {t.technique_id: t.technique_name for t in packet.retrieved}
+        allowed_mitigations = {
+            mitigation
+            for technique in packet.retrieved
+            for mitigation in technique.mitigations
+        }
         explanation = validate_llm_output(
-            request.llm_explanation.model_dump_json(), allowed_ids
+            request.llm_explanation.model_dump_json(), allowed_ids,
+            allowed_mitigations,
         )
 
     report = report_service.generate(request, packet, explanation)
