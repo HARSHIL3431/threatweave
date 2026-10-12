@@ -98,6 +98,36 @@ def test_render_benign_status_wording():
     assert "not flagged as anomalous" in text
 
 
+def test_render_labels_score_honestly_not_as_risk():
+    text = _pdf_text(PdfReportRenderer().render(_content()))
+    assert "Anomaly Score (Uncalibrated)" in text
+    assert "Risk Score" not in text
+
+
+def test_render_preserves_score_value_and_rejects_probability_language():
+    text = _pdf_text(PdfReportRenderer().render(_content()))
+    # Value formatting unchanged by the label correction (risk_score=0.7).
+    assert "0.7000" in text
+    assert "0.540229" in text
+    lowered = text.lower()
+    assert "probability of" not in lowered
+    assert "probabilistic" not in lowered
+    assert "statistical" in lowered
+    assert "calibrated risk" not in lowered
+    assert "confirmed attack" not in lowered
+    # Honest framing retained alongside the corrected label.
+    assert "candidate for review" in lowered
+
+
+def test_render_technique_confidence_labeled_as_candidate_qualifier():
+    exp = _explanation()
+    text = _pdf_text(PdfReportRenderer().render(_content(explanation=exp)))
+    flat = " ".join(text.split())
+    # Header renamed (extraction wraps it across lines; flatten to compare).
+    assert "Candidate confidence" in flat
+    assert "Technique Candidate confidence Reason" in flat
+
+
 def test_render_omits_llm_section_when_no_explanation():
     text = _pdf_text(PdfReportRenderer().render(_content(explanation=None)))
     assert "No LLM explanation was available" in text

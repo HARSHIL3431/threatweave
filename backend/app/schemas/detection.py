@@ -91,7 +91,13 @@ class NetworkFlowRequest(BaseModel):
 
 class DetectionDetails(BaseModel):
     is_anomaly: bool
-    anomaly_score: float
+    anomaly_score: float = Field(
+        ...,
+        description=(
+            "IsolationForest -score_samples(); higher means more anomalous. "
+            "Not a probability of attack."
+        ),
+    )
     threshold: float
     experiment_id: str
     operating_point: str
@@ -99,7 +105,13 @@ class DetectionDetails(BaseModel):
 
 class SeverityDetails(BaseModel):
     level: str = Field(..., description="'info', 'low', 'medium', 'high', or 'critical'")
-    risk_score: float
+    risk_score: float = Field(
+        ...,
+        description=(
+            "Echo of anomaly_score under INITIAL PLACEHOLDER CALIBRATION; "
+            "not a modeled risk probability."
+        ),
+    )
     calibration_note: str = "INITIAL PLACEHOLDER CALIBRATION"
 
 

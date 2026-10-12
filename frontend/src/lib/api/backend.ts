@@ -202,6 +202,10 @@ export async function downloadReport(report_id: string, file_name: string): Prom
   if (!REPORT_ID_RE.test(report_id)) throw new ApiError("INVALID_REPORT_ID", "Invalid report identifier.");
   const res = await fetch(`${apiBase()}/v1/reports/${report_id}/download`);
   if (!res.ok) throw new ApiError(`HTTP_${res.status}`, `Report download failed with status ${res.status}.`, res.status);
+  const contentType = res.headers.get("content-type") ?? "";
+  if (!contentType.includes("application/pdf")) {
+    throw new ApiError("REPORT_CONTENT_ERROR", "Report download did not return a PDF. The report may have expired; regenerate it in Reports.", res.status);
+  }
   const blob = await res.blob();
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");

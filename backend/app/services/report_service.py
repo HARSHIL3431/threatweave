@@ -212,7 +212,7 @@ class PdfReportRenderer:
             ("Operating Threshold", f"{content.threshold:.6f}"),
             ("Experiment / Operating Point", f"{sanitize_text(content.experiment_id)} / {sanitize_text(content.operating_point)}"),
             ("Severity Level", sanitize_text(content.severity_level)),
-            ("Risk Score", f"{content.risk_score:.4f}"),
+            ("Anomaly Score (Uncalibrated)", f"{content.risk_score:.4f}"),
             ("Model Version", sanitize_text(content.model_version)),
         ]))
         story.append(Spacer(1, 4))
@@ -356,7 +356,7 @@ class PdfReportRenderer:
         return tbl
 
     def _llm_technique_table(self, contexts) -> Table:
-        header = [self._ch("ID"), self._ch("Technique"), self._ch("Confidence"), self._ch("Reason")]
+        header = [self._ch("ID"), self._ch("Technique"), self._ch("Candidate confidence"), self._ch("Reason")]
         rows = [header]
         for c in contexts:
             rows.append([
@@ -422,7 +422,7 @@ class PdfReportRenderer:
     @staticmethod
     def _disclaimer_lines() -> List[str]:
         return [
-            "Anomaly detection is probabilistic. A flagged flow is a candidate for review, not proof of malicious activity.",
+            "Anomaly detection is statistical. A flagged flow is a candidate for review, not proof of malicious activity.",
             "MITRE ATT&CK results are contextual retrieval evidence, not confirmed detections or attribution.",
             "LLM output is explanatory only and must not be represented as verified diagnosis or confirmed attribution.",
             "Missing RAG or LLM data is reported honestly in this document and does not change the detection evidence.",
